@@ -13,7 +13,9 @@ const Url = require("../models/Url");
 
 const baseUrl = "http:localhost:3000";
 router.post("/shorten", async (req, res) => {
-    const { longUrl } = req.body;
+    let longUrl;
+    if (req.body.longUrl) longUrl = req.body.longUrl;
+    else longUrl = req.query.longUrl;
 
     if (!validUrl.isUri(baseUrl)) {
         return res.status(401).json("Invalid base URL");
