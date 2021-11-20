@@ -1,9 +1,6 @@
 const express = require("express");
-
 const router = express.Router();
-
-const validUrl = require("valid-url");
-const shortid = require("shortid");
+const isUrl = require("is-url");
 const { customAlphabet } = require("nanoid");
 
 const Url = require("../models/Url");
@@ -17,13 +14,18 @@ router.post("/shorten", async (req, res) => {
     if (req.body.longUrl) longUrl = req.body.longUrl;
     else longUrl = req.query.longUrl;
 
-    if (!validUrl.isUri(baseUrl)) {
-        return res.status(401).json("Invalid base URL");
+    if (longUrl) {
+        if (!longUrl.startsWith("http")) longUrl = `https://${longUrl.split(/\/\/(.+)/)[1]}`;
     }
-    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 12);
+
+    if (!isUrl(baseUrl)) {
+        return res.status(401).send("Invalid base URL");
+    }
+
+    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 9);
     const urlCode = nanoid();
 
-    if (validUrl.isUri(longUrl)) {
+    if (isUrl(longUrl)) {
         try {
             let url = await Url.findOne({ longUrl });
             if (url) {
@@ -40,8 +42,7 @@ router.post("/shorten", async (req, res) => {
                 res.json(url);
             }
         } catch (err) {
-            console.log(err);
-            res.status(500).json("Server Error");
+            res.status(500).send("Server Error");
         }
     } else {
         res.status(401).send("Invalid longUrl");
