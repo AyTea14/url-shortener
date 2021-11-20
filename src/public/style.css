@@ -27,6 +27,10 @@ body {
     font-size: 1.2em;
 }
 
+#shorten-btn {
+    cursor: pointer;
+}
+
 input {
     flex-grow: 1;
 }
@@ -39,6 +43,7 @@ button {
 
 input,
 button {
+    border-radius: 3px;
     padding: 0 1em;
     display: block;
     border: none;
@@ -51,5 +56,16 @@ button {
     font-size: 1.2em;
     text-align: center;
     display: block;
-    margin-top: 1em;
+    margin-top: 1rem;
+}
+
+#copy-btn {
+    border: none;
+    padding: 1em;
+    border-radius: 3px;
+    background-color: #6da89c;
+    cursor: pointer;
+    position: relative;
+    float: right;
+    margin-top: -0.5rem;
 }
