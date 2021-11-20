@@ -33,6 +33,7 @@ body {
 
 input {
     flex-grow: 1;
+    font-family: "Trebuchet MS", sans-serif;
 }
 
 button {
@@ -51,7 +52,7 @@ button {
 }
 
 #result {
-    color: rgb(41, 34, 34);
+    color: rgb(36, 32, 32);
     word-break: break-all;
     font-size: 1.2em;
     text-align: center;
@@ -63,6 +64,7 @@ button {
     border: none;
     padding: 1em;
     border-radius: 3px;
+    font-family: "Trebuchet MS", sans-serif;
     background-color: #6da89c;
     cursor: pointer;
     position: relative;
