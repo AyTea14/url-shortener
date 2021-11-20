@@ -26,7 +26,6 @@ shortenBtn.addEventListener("click", () => {
 
 clipboardBtn.addEventListener("click", () => {
     const url = shortUrl;
-    console.log(shortUrl);
     if (url) {
         return copyTextToClipboard(url);
     }
