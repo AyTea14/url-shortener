@@ -11,7 +11,7 @@ const Url = require("../models/Url");
 //@route    POST /api/url/shorten
 //@desc     Create short URL
 
-const baseUrl = "http:localhost:3000";
+const baseUrl = "https://url-shortener.aytea14.repl.co";
 router.post("/shorten", async (req, res) => {
     let longUrl;
     if (req.body.longUrl) longUrl = req.body.longUrl;
