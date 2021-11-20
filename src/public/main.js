@@ -2,9 +2,10 @@ const input = document.querySelector("#input");
 const shortenBtn = document.querySelector("#shorten-btn");
 const clipboardBtn = document.querySelector("#copy-btn");
 const result = document.querySelector("#result");
+const x = document.querySelector(".copy-box");
 let shortUrl;
 
-shortenBtn.addEventListener("click", () => {
+shortenBtn.addEventListener("click", async () => {
     result.innerText = "Loading...";
     fetch(`/api/url/shorten`, {
         method: "POST",
@@ -12,23 +13,30 @@ shortenBtn.addEventListener("click", () => {
         headers: { "Content-Type": "application/json" },
     })
         .then((res) => res.json())
-        .then(async (data) => {
+        .then((data) => {
             shortUrl = data.shortUrl;
             result.innerText = shortUrl;
             result.setAttribute("href", shortUrl);
+
+            if (x.style.display === "none" && shortUrl) {
+                x.style.display = "block";
+            } else if (x.style.display === "none" && !shortUrl) {
+                x.style.display = "none";
+            } else if (x.style.display === "none" && shortUrl) {
+                x.style.display = "none";
+            }
         })
-        .catch((error) => {
+        .catch((e) => {
             shortUrl = undefined;
+            x.style.display = "none";
             result.setAttribute("href", "");
-            result.innerText = "Invalid URL";
+            alert("Invalid URL");
         });
 });
 
 clipboardBtn.addEventListener("click", () => {
     const url = shortUrl;
-    if (url) {
-        return copyTextToClipboard(url);
-    }
+    if (url) return copyTextToClipboard(url);
 });
 
 function fallbackCopyTextToClipboard(text) {
