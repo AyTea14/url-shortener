@@ -11,7 +11,7 @@ const Url = require("../models/Url");
 //@route    POST /api/url/shorten
 //@desc     Create short URL
 
-const baseUrl = "https://url-shortener.aytea14.repl.co";
+const baseUrl = "https://shortener.aytea14.repl.co";
 router.post("/shorten", async (req, res) => {
     let longUrl;
     if (req.body.longUrl) longUrl = req.body.longUrl;
@@ -20,7 +20,7 @@ router.post("/shorten", async (req, res) => {
     if (!validUrl.isUri(baseUrl)) {
         return res.status(401).json("Invalid base URL");
     }
-    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 7);
+    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 12);
     const urlCode = nanoid();
 
     if (validUrl.isUri(longUrl)) {
