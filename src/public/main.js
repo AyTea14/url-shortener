@@ -2,6 +2,7 @@ const input = document.querySelector("#input");
 const shortenBtn = document.querySelector("#shorten-btn");
 const clipboardBtn = document.querySelector("#copy-btn");
 const result = document.querySelector("#result");
+let shortUrl;
 
 shortenBtn.addEventListener("click", () => {
     result.innerText = "Loading...";
@@ -11,18 +12,21 @@ shortenBtn.addEventListener("click", () => {
         headers: { "Content-Type": "application/json" },
     })
         .then((res) => res.json())
-        .then((data) => {
-            result.innerText = data.shortUrl;
-            result.setAttribute("href", data.shortUrl);
+        .then(async (data) => {
+            shortUrl = data.shortUrl;
+            result.innerText = shortUrl;
+            result.setAttribute("href", shortUrl);
         })
         .catch((error) => {
+            shortUrl = undefined;
             result.setAttribute("href", "");
             result.innerText = "Invalid URL";
         });
 });
 
 clipboardBtn.addEventListener("click", () => {
-    const url = result.href;
+    const url = shortUrl;
+    console.log(shortUrl);
     if (url) {
         return copyTextToClipboard(url);
     }
