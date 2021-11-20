@@ -23,7 +23,7 @@ shortenBtn.addEventListener("click", () => {
 
 clipboardBtn.addEventListener("click", () => {
     const url = result.href;
-    if (!url == "http://localhost:3000/" || !url == "https://shorten.aytea14.repl.co/") {
+    if (!url === "http://localhost:3000/" || !url === "https://shorten.aytea14.repl.co/") {
         console.log(result.href);
         copyTextToClipboard(url);
     }
