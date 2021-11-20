@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 const isUrl = require("is-url");
 const { customAlphabet } = require("nanoid");
-
 const Url = require("../models/Url");
+const { randomRange } = require("../utils/functions");
 
 //@route    POST /api/url/shorten
 //@desc     Create short URL
 
-const baseUrl = "https://shortener.aytea14.repl.co";
+const baseUrl = "https://shorten.aytea14.repl.co";
+// const baseUrl = "http://localhost:3000";
 router.post("/shorten", async (req, res) => {
     let longUrl;
     if (req.body.longUrl) longUrl = req.body.longUrl;
@@ -22,7 +23,7 @@ router.post("/shorten", async (req, res) => {
         return res.status(401).send("Invalid base URL");
     }
 
-    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 9);
+    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(7, 10));
     const urlCode = nanoid();
 
     if (isUrl(longUrl)) {
@@ -31,7 +32,7 @@ router.post("/shorten", async (req, res) => {
             if (url) {
                 res.json(url);
             } else {
-                const shortUrl = baseUrl + "/r/" + urlCode;
+                const shortUrl = `${baseUrl}/${urlCode}`;
                 url = new Url({
                     longUrl,
                     shortUrl,
