@@ -29,7 +29,7 @@ router.post("/shorten", async (req, res) => {
             if (url) {
                 res.json(url);
             } else {
-                const shortUrl = baseUrl + "/" + urlCode;
+                const shortUrl = baseUrl + "/r/" + urlCode;
                 url = new Url({
                     longUrl,
                     shortUrl,
@@ -44,7 +44,7 @@ router.post("/shorten", async (req, res) => {
             res.status(500).json("Server Error");
         }
     } else {
-        res.status(401).json("Invalid longUrl");
+        res.status(401).send("Invalid longUrl");
     }
 });
 
