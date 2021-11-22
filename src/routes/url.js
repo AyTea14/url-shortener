@@ -10,24 +10,25 @@ const { randomRange } = require("../utils/functions");
 
 const baseUrl = process.env.DOMAIN || "https://shorten.aytea14.repl.co";
 
-// const baseUrl = "http://localhost:3000";
 router.post("/shorten", async (req, res) => {
     let longUrl;
     if (req.body.longUrl) longUrl = req.body.longUrl;
     else longUrl = req.query.longUrl;
 
-    if (longUrl) {
-        if (!longUrl.startsWith("http")) longUrl = `https://${longUrl.split(/\/\/(.+)/)[1]}`;
+    if (!longUrl) {
+        return res.send({ error: "Please enter a URL" });
+    } else {
+        longUrl = new URL(`${longUrl}`);
     }
 
     if (!isUrl(baseUrl)) {
-        return res.status(401).send("Invalid base URL");
+        return res.status(401).send({ error: "Invalid base URL" });
     }
 
-    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(7, 10));
+    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(5, 7));
     const urlCode = nanoid();
 
-    if (isUrl(longUrl)) {
+    if (isUrl(longUrl.href)) {
         try {
             let url = await Url.findOne({ longUrl });
             if (url) {
@@ -44,10 +45,10 @@ router.post("/shorten", async (req, res) => {
                 res.json(url);
             }
         } catch (err) {
-            res.status(500).send("Server Error");
+            res.status(500).send({ error: "Server error" });
         }
     } else {
-        res.status(401).send("Invalid longUrl");
+        res.status(401).send({ error: "Invalid longUrl" });
     }
 });
 
