@@ -24,14 +24,24 @@ shortenBtn.addEventListener("click", async () => {
                 x.style.display = "none";
             } else if (x.style.display === "none" && shortUrl) {
                 x.style.display = "none";
+            } else if (result.innerHTML === "undefined") {
+                x.style.display = "none";
             }
         })
         .catch((e) => {
             shortUrl = undefined;
             x.style.display = "none";
+            result.innerText = "";
             result.setAttribute("href", "");
             alert("Invalid URL");
         });
+});
+
+input.addEventListener("keyup", (event) => {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        shortenBtn.click();
+    }
 });
 
 clipboardBtn.addEventListener("click", () => {
