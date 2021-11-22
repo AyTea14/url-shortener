@@ -3,6 +3,7 @@ const router = express.Router();
 const Url = require("../models/Url");
 
 router.get("/:code", async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
     try {
         const url = await Url.findOne({ urlCode: req.params.code });
         if (url) return res.redirect(url.longUrl);
