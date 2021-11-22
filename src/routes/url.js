@@ -15,15 +15,10 @@ router.post("/shorten", async (req, res) => {
     if (req.body.longUrl) longUrl = req.body.longUrl;
     else longUrl = req.query.longUrl;
 
-    if (!longUrl) {
-        return res.send({ error: "Please enter a URL" });
-    } else {
-        longUrl = new URL(`${longUrl}`);
-    }
+    if (!longUrl) return res.send({ error: "Please enter a URL" });
+    else longUrl = new URL(`${longUrl}`);
 
-    if (!isUrl(baseUrl)) {
-        return res.status(401).send({ error: "Invalid base URL" });
-    }
+    if (!isUrl(baseUrl)) return res.status(401).send({ error: "Invalid base URL" });
 
     const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(5, 7));
     const urlCode = nanoid();
