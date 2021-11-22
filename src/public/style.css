@@ -31,6 +31,10 @@ body {
     cursor: pointer;
 }
 
+#shorten-btn:hover {
+    background-color: #57867c;
+}
+
 input {
     flex-grow: 1;
     font-family: "Trebuchet MS", sans-serif;
@@ -68,4 +72,8 @@ button {
     position: relative;
     float: right;
     margin-top: -0.7rem;
+}
+
+#copy-btn:hover {
+    background-color: #57867c;
 }
