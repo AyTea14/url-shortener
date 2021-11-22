@@ -16,7 +16,13 @@ router.post("/shorten", async (req, res) => {
     else longUrl = req.query.longUrl;
 
     if (!longUrl) return res.send({ error: "Please enter a URL" });
-    else longUrl = new URL(`${longUrl}`);
+    else {
+        try {
+            longUrl = new URL(`${longUrl}`);
+        } catch (error) {
+            if (error.code === "ERR_INVALID_URL") return res.status(401).send({ error: "Invalid longUrl" });
+        }
+    }
 
     if (!isUrl(baseUrl)) return res.status(401).send({ error: "Invalid base URL" });
 
