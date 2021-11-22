@@ -8,7 +8,8 @@ const { randomRange } = require("../utils/functions");
 //@route    POST /api/url/shorten
 //@desc     Create short URL
 
-const baseUrl = "https://shorten.aytea14.repl.co";
+const baseUrl = process.env.DOMAIN || "https://shorten.aytea14.repl.co";
+
 // const baseUrl = "http://localhost:3000";
 router.post("/shorten", async (req, res) => {
     let longUrl;
