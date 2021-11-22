@@ -11,6 +11,7 @@ const { randomRange } = require("../utils/functions");
 const baseUrl = process.env.DOMAIN || "https://shorten.aytea14.repl.co";
 
 router.post("/shorten", async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
     let longUrl;
     if (req.body.longUrl) longUrl = req.body.longUrl;
     else longUrl = req.query.longUrl;
