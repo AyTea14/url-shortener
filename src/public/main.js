@@ -14,8 +14,9 @@ shortenBtn.addEventListener("click", async () => {
     })
         .then((res) => res.json())
         .then((data) => {
-            const baseUrl = "https://shrter.cf";
-            shortUrl = `${baseUrl}/${data.urlCode}`;
+            console.log(data);
+            if (data.urlCode) shortUrl = `https://shrter.cf/${data.urlCode}`;
+            else shortUrl = undefined;
             result.innerText = shortUrl;
             result.setAttribute("href", shortUrl);
 
@@ -46,8 +47,7 @@ input.addEventListener("keyup", (event) => {
 });
 
 clipboardBtn.addEventListener("click", () => {
-    const url = shortUrl;
-    if (url) return copyTextToClipboard(url);
+    if (shortUrl) return copyTextToClipboard(shortUrl);
 });
 
 function fallbackCopyTextToClipboard(text) {
