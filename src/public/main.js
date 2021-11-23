@@ -14,7 +14,8 @@ shortenBtn.addEventListener("click", async () => {
     })
         .then((res) => res.json())
         .then((data) => {
-            shortUrl = data.shortUrl;
+            const baseUrl = "https://shrter.cf";
+            shortUrl = `${baseUrl}/${data.urlCode}`;
             result.innerText = shortUrl;
             result.setAttribute("href", shortUrl);
 
