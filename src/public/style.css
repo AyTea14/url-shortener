@@ -43,7 +43,7 @@ input {
 button {
     background-color: #6da89c;
     color: white;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
 }
 
 input,
@@ -59,19 +59,19 @@ button {
     color: rgb(36, 32, 32);
     word-break: break-all;
     font-size: 1em;
-    /* text-align: center; */
+    /* text-align: right; */
     display: block;
     margin-top: 1rem;
 }
 
 #copy-btn {
     border: none;
-    padding: 1em;
+    padding: 0.8em;
     background-color: #6da89c;
     cursor: pointer;
     position: relative;
     float: right;
-    margin-top: -0.7rem;
+    margin-top: -0.5rem;
 }
 
 #copy-btn:hover {
