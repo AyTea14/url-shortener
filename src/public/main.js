@@ -14,7 +14,6 @@ shortenBtn.addEventListener("click", async () => {
     })
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
             if (data.urlCode) shortUrl = `https://shrter.cf/${data.urlCode}`;
             else shortUrl = undefined;
             result.innerText = shortUrl;
@@ -74,11 +73,11 @@ function copyTextToClipboard(text) {
         return;
     }
     navigator.clipboard.writeText(text);
-    clipboardBtn.innerText = "Copied url";
+    clipboardBtn.innerText = "Copied";
     clipboardBtn.style["background-color"] = "#57867c";
     setTimeout(() => {
-        clipboardBtn.innerText = "copy url";
-        clipboardBtn.style["background-color"] = "#6da89c";
+        clipboardBtn.innerText = "Copy";
+        clipboardBtn.removeAttribute("style");
     }, 1_250);
     // alert("Copied url to the clipboard");
 }
