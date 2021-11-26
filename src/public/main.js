@@ -74,10 +74,9 @@ function copyTextToClipboard(text) {
     }
     navigator.clipboard.writeText(text);
     clipboardBtn.innerText = "Copied";
-    clipboardBtn.style["background-color"] = "#57867c";
+    clipboardBtn.style["background-color"] = "#23272a";
     setTimeout(() => {
         clipboardBtn.innerText = "Copy";
         clipboardBtn.removeAttribute("style");
-    }, 1_250);
-    // alert("Copied url to the clipboard");
+    }, 1_150);
 }
