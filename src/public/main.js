@@ -14,7 +14,10 @@ shortenBtn.addEventListener("click", async () => {
     })
         .then((res) => res.json())
         .then((data) => {
-            if (data.urlCode) shortUrl = `https://shrter.cf/${data.urlCode}`;
+            const host = window.location.hostname;
+            const protocol = window.location.protocol;
+            console.log(host, protocol);
+            if (data.urlCode) shortUrl = `${protocol}//${host}:${window.location.port}/${data.urlCode}`;
             else shortUrl = undefined;
             result.innerText = shortUrl;
             result.setAttribute("href", shortUrl);
