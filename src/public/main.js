@@ -16,8 +16,9 @@ shortenBtn.addEventListener("click", async () => {
         .then((data) => {
             const host = window.location.hostname;
             const protocol = window.location.protocol;
+            const port = window.location.port;
             console.log(host, protocol);
-            if (data.urlCode) shortUrl = `${protocol}//${host}:${window.location.port}/${data.urlCode}`;
+            if (data.urlCode) shortUrl = `${protocol}//${host}${port ? ":" + port : ""}/${data.urlCode}`;
             else shortUrl = undefined;
             result.innerText = shortUrl;
             result.setAttribute("href", shortUrl);
