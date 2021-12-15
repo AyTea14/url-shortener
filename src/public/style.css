@@ -68,9 +68,10 @@ button {
     padding: 0.8em;
     background-color: #3b4247;
     cursor: pointer;
-    position: relative;
     float: right;
     margin-top: -0.5rem;
+    height: 2.3rem;
+    width: 4.5rem;
 }
 
 #copy-btn:hover {

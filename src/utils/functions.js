@@ -3,9 +3,7 @@ module.exports = {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     },
     getRandomInt(max) {
-        try {
-            return Math.floor(Math.random() * Math.floor(max));
-        } catch (e) {}
+        return Math.floor(Math.random() * Math.floor(max));
     },
     getRandomString: (length = 10) => {
         const randomChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";

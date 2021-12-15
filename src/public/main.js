@@ -22,15 +22,10 @@ shortenBtn.addEventListener("click", async () => {
             result.innerText = shortUrl;
             result.setAttribute("href", shortUrl);
 
-            if (x.style.display === "none" && shortUrl) {
-                x.style.display = "block";
-            } else if (x.style.display === "none" && !shortUrl) {
-                x.style.display = "none";
-            } else if (x.style.display === "none" && shortUrl) {
-                x.style.display = "none";
-            } else if (result.innerHTML === "undefined") {
-                x.style.display = "none";
-            }
+            if (x.style.display === "none" && shortUrl) x.style.display = "block";
+            else if (x.style.display === "none" && !shortUrl) x.style.display = "none";
+            else if (x.style.display === "none" && shortUrl) x.style.display = "none";
+            else if (result.innerHTML === "undefined") x.style.display = "none";
         })
         .catch((e) => {
             shortUrl = undefined;
@@ -77,9 +72,5 @@ function copyTextToClipboard(text) {
     }
     navigator.clipboard.writeText(text);
     clipboardBtn.innerText = "Copied";
-    clipboardBtn.style["background-color"] = "#23272a";
-    setTimeout(() => {
-        clipboardBtn.innerText = "Copy";
-        clipboardBtn.removeAttribute("style");
-    }, 1_150);
+    setTimeout(() => (clipboardBtn.innerText = "Copy"), 1_150);
 }
