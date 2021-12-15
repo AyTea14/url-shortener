@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>URL Shortener</title>
+        <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+            crossorigin="anonymous"
+        />
+    </head>
+    <body>
+        <div class="container">
+            <h1>URL Shortener</h1>
+            <form action="/api/url/shorten" method="post" class="my-4 form-inline">
+                <label for="longUrl" class="sr-only">Long URL</label>
+                <input
+                    required
+                    placeholder="Your URL"
+                    type="url"
+                    name="longUrl"
+                    id="longUrl"
+                    class="form-control col mr-2"
+                />
+                <button class="btn btn-primary" type="submit">Shorten</button>
+            </form>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Full URL</th>
+                        <th>Short URL</th>
+                        <th>Clicks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% shortUrls.forEach((shortUrl) => { %>
+                    <tr>
+                        <td>
+                            <a href="<%= shortUrl.longUrl %>"
+                                ><%= shortUrl.longUrl.length > 98 ? `${shortUrl.longUrl.substr(0, 98)}...` : shortUrl.longUrl
+                                %></a
+                            >
+                        </td>
+                        <td><a href="/<%= shortUrl.urlCode %>"><%= shortUrl.urlCode %></a></td>
+                        <td><%= shortUrl.clicks %></td>
+                    </tr>
+                    <%}) %>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

@@ -11,7 +11,6 @@ const { randomRange } = require("../utils/functions");
 const baseUrl = process.env.DOMAIN || "https://shorten.aytea14.repl.co";
 
 router.post("/shorten", async (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
     let longUrl;
     if (req.body.longUrl) longUrl = req.body.longUrl;
     else longUrl = req.query.longUrl;
@@ -44,7 +43,8 @@ router.post("/shorten", async (req, res) => {
                     date: new Date().toISOString(),
                 });
                 await url.save();
-                res.json(url);
+                res.redirect("/");
+                // res.json(url);
             }
         } catch (err) {
             res.status(500).send({ error: "Server error" });
