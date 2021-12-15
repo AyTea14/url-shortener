@@ -26,7 +26,7 @@ router.post("/shorten", async (req, res) => {
 
     if (!isUrl(baseUrl)) return res.status(401).send({ error: "Invalid base URL" });
 
-    const nanoid = customAlphabet("1234567890_abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ-", randomRange(6, 8));
+    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 8));
     const urlCode = nanoid();
 
     if (isUrl(longUrl.href)) {
