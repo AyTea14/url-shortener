@@ -50,14 +50,6 @@ body {
     border-bottom-right-radius: 0.3rem;
 }
 
-#shorten-btn:hover {
-    background-color: #23272a;
-}
-
-#copy-btn:hover {
-    background-color: #23272a;
-}
-
 input {
     flex-grow: 1;
     font-family: "Trebuchet MS", sans-serif;
@@ -76,4 +68,24 @@ button {
     display: block;
     border: none;
     outline: none;
+}
+
+@media screen and (min-width: 600px) {
+    #shorten-btn:hover {
+        background-color: #23272a;
+    }
+
+    #copy-btn:hover {
+        background-color: #23272a;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #shorten-btn:active {
+        background-color: #23272a;
+    }
+
+    #copy-btn:active {
+        background-color: #23272a;
+    }
 }
