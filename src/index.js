@@ -8,6 +8,7 @@ routes(app);
 app.use(
     cors({
         origin: "*",
+        credentials: true,
     })
 );
 
