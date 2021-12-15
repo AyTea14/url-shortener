@@ -43,8 +43,8 @@ router.post("/shorten", async (req, res) => {
                     date: new Date().toISOString(),
                 });
                 await url.save();
-                res.redirect("/");
-                // res.json(url);
+                
+                res.json(url);
             }
         } catch (err) {
             res.status(500).send({ error: "Server error" });
