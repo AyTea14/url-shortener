@@ -1,4 +1,5 @@
 const input = document.querySelector("#input");
+const output = document.querySelector("#output");
 const shortenBtn = document.querySelector("#shorten-btn");
 const clipboardBtn = document.querySelector("#copy-btn");
 const result = document.querySelector("#result");
@@ -6,7 +7,6 @@ const x = document.querySelector(".copy-box");
 let shortUrl;
 
 shortenBtn.addEventListener("click", async () => {
-    result.innerText = "Loading...";
     fetch(`/api/url/shorten`, {
         method: "POST",
         body: JSON.stringify({ longUrl: `${input.value}` }),
@@ -19,19 +19,17 @@ shortenBtn.addEventListener("click", async () => {
             const port = window.location.port;
             if (data.urlCode) shortUrl = `${protocol}//${host}${port ? ":" + port : ""}/${data.urlCode}`;
             else shortUrl = undefined;
-            result.innerText = shortUrl;
-            result.setAttribute("href", shortUrl);
+            output.value = shortUrl;
 
-            if (x.style.display === "none" && shortUrl) x.style.display = "block";
+            if (x.style.display === "none" && shortUrl) x.style.display = "flex";
             else if (x.style.display === "none" && !shortUrl) x.style.display = "none";
             else if (x.style.display === "none" && shortUrl) x.style.display = "none";
-            else if (result.innerHTML === "undefined") x.style.display = "none";
+            else if (output.value === "undefined") x.style.display = "none";
         })
         .catch((e) => {
             shortUrl = undefined;
             x.style.display = "none";
-            result.innerText = "";
-            result.setAttribute("href", "");
+            output.value = "";
             alert("Invalid URL");
         });
 });

@@ -27,11 +27,33 @@ body {
     font-size: 1.2em;
 }
 
+.copy-box {
+    height: 35px;
+    display: flex;
+    font-size: 1.2em;
+    height: 2.2rem;
+    margin-top: 1rem;
+}
+
 #shorten-btn {
     cursor: pointer;
+    border-top-right-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
+}
+
+#copy-btn {
+    cursor: pointer;
+    height: 2.2rem;
+    width: 4.6rem;
+    border-top-right-radius: 0.3rem;
+    border-bottom-right-radius: 0.3rem;
 }
 
 #shorten-btn:hover {
+    background-color: #23272a;
+}
+
+#copy-btn:hover {
     background-color: #23272a;
 }
 
@@ -51,29 +73,4 @@ button {
     display: block;
     border: none;
     outline: none;
-}
-
-#result {
-    font-family: "Trebuchet MS", sans-serif;
-    color: rgb(240, 240, 240);
-    /* color: #23272a; */
-    word-break: break-all;
-    font-size: 1em;
-    display: block;
-    margin-top: 1rem;
-}
-
-#copy-btn {
-    border: none;
-    padding: 0.8em;
-    background-color: #3b4247;
-    cursor: pointer;
-    float: right;
-    margin-top: -0.5rem;
-    height: 2.3rem;
-    width: 4.5rem;
-}
-
-#copy-btn:hover {
-    background-color: #23272a;
 }
