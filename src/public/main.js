@@ -42,6 +42,9 @@ input.addEventListener("keyup", (event) => {
 });
 
 clipboardBtn.addEventListener("click", () => {
+    output.focus();
+    output.setSelectionRange(0, shortUrl.length);
+    setTimeout(() => output.setSelectionRange(0, 0), 1_500);
     if (shortUrl) return copyTextToClipboard(shortUrl);
 });
 
@@ -70,5 +73,5 @@ function copyTextToClipboard(text) {
     }
     navigator.clipboard.writeText(text);
     clipboardBtn.innerText = "Copied";
-    setTimeout(() => (clipboardBtn.innerText = "Copy"), 1_150);
+    setTimeout(() => (clipboardBtn.innerText = "Copy"), 1_500);
 }
