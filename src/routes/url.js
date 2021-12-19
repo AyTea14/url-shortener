@@ -4,7 +4,7 @@ const isUrl = require("is-url");
 const { customAlphabet } = require("nanoid");
 const Url = require("../models/Url");
 const { randomRange } = require("../utils/functions");
-const baseUrl = process.env.DOMAIN || "https://shorten.aytea14.repl.co";
+// const baseUrl = process.env.DOMAIN || "https://shorten.aytea14.repl.co";
 
 router.post("/shorten", async (req, res) => {
     let longUrl;
@@ -19,7 +19,7 @@ router.post("/shorten", async (req, res) => {
         if (error.code === "ERR_INVALID_URL") return res.status(401).send({ error: "Invalid longUrl" });
     }
 
-    if (!isUrl(baseUrl)) return res.status(401).send({ error: "Invalid base URL" });
+    // if (!isUrl(baseUrl)) return res.status(401).send({ error: "Invalid base URL" });
 
     const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 8));
     const urlCode = nanoid();
@@ -29,10 +29,9 @@ router.post("/shorten", async (req, res) => {
             let url = await Url.findOne({ longUrl });
             if (url) return res.json(url);
             else {
-                const shortUrl = `${baseUrl}/${urlCode}`;
+                // const shortUrl = `${baseUrl}/${urlCode}`;
                 url = new Url({
                     longUrl,
-                    shortUrl,
                     urlCode,
                     date: new Date().toISOString(),
                 });

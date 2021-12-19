@@ -2,7 +2,6 @@ const input = document.querySelector("#input");
 const output = document.querySelector("#output");
 const shortenBtn = document.querySelector("#shorten-btn");
 const clipboardBtn = document.querySelector("#copy-btn");
-const result = document.querySelector("#result");
 const x = document.querySelector(".copy-box");
 let shortUrl;
 
@@ -17,7 +16,7 @@ shortenBtn.addEventListener("click", async () => {
             const host = window.location.hostname;
             const protocol = window.location.protocol;
             const port = window.location.port;
-            if (data.urlCode) shortUrl = `${protocol}//${host}${port ? ":" + port : ""}/${data.urlCode}`;
+            if (data.urlCode) shortUrl = `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}`;
             else shortUrl = undefined;
             output.value = shortUrl;
 
@@ -72,6 +71,6 @@ function copyTextToClipboard(text) {
         return;
     }
     navigator.clipboard.writeText(text);
-    clipboardBtn.innerText = "Copied";
-    setTimeout(() => (clipboardBtn.innerText = "Copy"), 1_500);
+    clipboardBtn.textContent = "Copied";
+    setTimeout(() => (clipboardBtn.textContent = "Copy"), 1_500);
 }
