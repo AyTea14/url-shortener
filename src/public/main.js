@@ -66,10 +66,7 @@ function fallbackCopyTextToClipboard(text) {
     document.body.removeChild(textArea);
 }
 function copyTextToClipboard(text) {
-    if (!navigator.clipboard) {
-        fallbackCopyTextToClipboard(text);
-        return;
-    }
+    if (!navigator.clipboard) return fallbackCopyTextToClipboard(text);
     navigator.clipboard.writeText(text);
     clipboardBtn.textContent = "Copied";
     setTimeout(() => (clipboardBtn.textContent = "Copy"), 1_500);
