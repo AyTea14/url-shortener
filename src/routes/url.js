@@ -7,9 +7,11 @@ const { randomRange } = require("../utils/functions");
 // const baseUrl = process.env.DOMAIN || "https://shorten.aytea14.repl.co";
 
 router.post("/shorten", async (req, res) => {
-    let longUrl;
+    let longUrl, shorturl;
     if (req.body.longUrl) longUrl = req.body.longUrl;
     else longUrl = req.query.longUrl;
+    if (req.body.shorturl) shorturl = req.body.shorturl;
+    else shorturl = req.query.shorturl;
 
     if (!longUrl) return res.send({ error: "Please enter a URL" });
 
@@ -19,24 +21,28 @@ router.post("/shorten", async (req, res) => {
         if (error.code === "ERR_INVALID_URL") return res.status(401).send({ error: "Invalid longUrl" });
     }
 
-    // if (!isUrl(baseUrl)) return res.status(401).send({ error: "Invalid base URL" });
-
     const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 8));
-    const urlCode = nanoid();
+    const urlCode = shorturl ? shorturl : nanoid();
 
     if (isUrl(longUrl.href)) {
         try {
+            if (shorturl && shorturl.length) {
+                if (shorturl.length > 30 || shorturl.length < 5) {
+                    return res.send({ error: "Custom short URLs must be between 5 and 30 characters long." });
+                }
+                var shorturlregex = /^[a-zA-Z0-9_]+$/;
+                let test = shorturl.search(shorturlregex);
+                if (test == -1) {
+                    return res.send({
+                        error: "Custom short URLs can only contain alphanumeric characters and underscores.",
+                    });
+                }
+            }
             let url = await Url.findOne({ longUrl });
             if (url) return res.json(url);
             else {
-                // const shortUrl = `${baseUrl}/${urlCode}`;
-                url = new Url({
-                    longUrl,
-                    urlCode,
-                    date: new Date().toISOString(),
-                });
+                url = new Url({ longUrl, urlCode, date: new Date().toISOString() });
                 await url.save();
-
                 res.json(url);
             }
         } catch (err) {
