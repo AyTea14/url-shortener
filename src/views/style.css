@@ -5,6 +5,9 @@
 #createformlabel {
     text-align: center;
 }
+p {
+    color: #fff;
+}
 .smallink {
     font-size: 11px;
 }
@@ -33,7 +36,7 @@ img.menuimg {
     border: 0;
 }
 img.graph {
-    border: 2px solid #000;
+    border: 2px solid #fff;
     margin-bottom: 10px;
 }
 img.floatRight {
@@ -51,9 +54,8 @@ img.floatLeft {
     height: auto !important;
     height: 100%;
     margin: 0 auto -34px;
-    background: #fff;
-    background: -moz-linear-gradient(top, #fff, #dfd);
-    background: -webkit-gradient(linear, center top, center bottom, from(#fff), to(#dfd));
+    /* background: -moz-linear-gradient(top, #fff, #dfd);
+    background: -webkit-gradient(linear, center top, center bottom, from(#fff), to(#dfd)); */
 }
 #footer,
 #push {
@@ -79,6 +81,8 @@ img.logo {
     margin-right: auto;
     padding-bottom: 10px;
     padding-top: 10px;
+    width: 300px;
+    height: 180px;
 }
 #frontpage form {
     padding: 0;
@@ -135,7 +139,7 @@ h4 {
     font-family: verdana, serif;
     text-align: left;
     padding-bottom: 1px;
-    border-color: #0b0;
+    border-color: #fff;
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
@@ -148,15 +152,15 @@ h4 {
 }
 #menu a:link {
     text-decoration: none;
-    color: #000;
+    color: #fff;
 }
 #menu a:visited {
     text-decoration: none;
-    color: #000;
+    color: #fff;
 }
 #menu a:hover {
     text-decoration: none;
-    color: #0b0;
+    color: #fff;
 }
 #errortext {
     color: red;
@@ -249,7 +253,38 @@ input.shorturlbox {
     margin-left: 4px;
     margin-right: 2px;
 }
+button {
+    cursor: pointer;
+}
+.copy_container {
+    display: flex;
+}
+button.copy_button {
+    font-size: 20px;
+    width: 70px;
+}
+.oriurl {
+    font-size: 11px;
+    margin-top: 15px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+    color: #fff;
+}
+input#short_url {
+    width: 480px;
+    font-size: 20px;
+    font-family: verdana, serif;
+}
 input.submitbutton {
+    margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+    font-size: 16px;
+}
+button.submitbutton {
     margin-bottom: 10px;
     display: block;
     margin-left: auto;
@@ -262,9 +297,10 @@ body {
     height: 100%;
     font-family: verdana, serif;
     min-width: 460px;
+    background: #23272a;
 }
 body hr {
-    border-top: 1px solid #0b0;
+    border-top: 1px solid #fff;
     height: 1px;
     width: 100%;
     margin-top: 5px;
@@ -292,7 +328,7 @@ body a:visited {
 }
 body a:hover {
     text-decoration: underline;
-    color: #0b0;
+    color: #fff;
 }
 body {
     text-align: center;
@@ -328,7 +364,7 @@ body a.memsetlink:visited {
 }
 body a.memsetlink:hover {
     text-decoration: none;
-    color: #0b0;
+    color: #fff;
     font-family: "arial black", serif;
     font-size: 14px;
     font-weight: bold;
@@ -439,6 +475,7 @@ body a.memsetlink:hover {
     text-align: center;
     font-size: 12px;
     margin-bottom: 10px;
+    color: #fff;
 }
 #minisculetext {
     font-size: 4px;

@@ -16,14 +16,11 @@ shortenBtn.addEventListener("click", async () => {
             const host = window.location.hostname;
             const protocol = window.location.protocol;
             const port = window.location.port;
-            if (data.urlCode) shortUrl = `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}`;
-            else shortUrl = undefined;
+            shortUrl = data.urlCode ? `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}` : undefined;
             output.value = shortUrl;
 
             if (x.style.display === "none" && shortUrl) x.style.display = "flex";
-            else if (x.style.display === "none" && !shortUrl) x.style.display = "none";
-            else if (x.style.display === "none" && shortUrl) x.style.display = "none";
-            else if (output.value === "undefined") x.style.display = "none";
+            else x.style.display = "none";
         })
         .catch((e) => {
             shortUrl = undefined;

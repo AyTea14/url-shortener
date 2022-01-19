@@ -1,73 +1,177 @@
+const output = document.querySelector("#short_url");
+const submitbutton = document.querySelector(".submitbutton");
+const outputBox = document.querySelector(".shorten_url");
+const logo = document.querySelector(".logo");
+const oriurl = document.querySelector(".oriurl");
+const line = document.querySelector("#line");
+const copyBtn = document.querySelector(".copy_button");
+const input = document.querySelector(".urlbox");
+const shorturlbox = document.querySelector(".shorturlbox");
+let shortUrl, statusCode;
+
+submitbutton.addEventListener("click", () => {
+    let protoregex = /^([-A-Za-z0-9]{1,15}:)/;
+    let urlregex = /.\../;
+    let test = input.value.search(urlregex);
+    let test2 = input.value.search(protoregex);
+    if (!input.value && input.value.length < 4) {
+        submitError("Please enter a valid URL to shorten.");
+        input.focus();
+        input.select();
+        return false;
+    }
+    if (shorturlbox.value.length) {
+        if (shorturlbox.value.length > 30 || shorturlbox.value.length < 5) {
+            submitError("Custom short URLs must be between 5 and 30 characters long.");
+            shorturlbox.focus();
+            shorturlbox.select();
+            return false;
+        }
+        let shorturlregex = /^[a-zA-Z0-9_]+$/;
+        test = shorturlbox.value.search(shorturlregex);
+        if (test == -1) {
+            submitError("Custom short URLs can only contain alphanumeric characters and underscores.");
+            shorturlbox.focus();
+            shorturlbox.select();
+            return false;
+        }
+    }
+
+    fetch(`/api/url/shorten`, {
+        method: "POST",
+        body: JSON.stringify({ longUrl: `${input.value}`, shorturl: shorturlbox.value }),
+        headers: { "Content-Type": "application/json" },
+    })
+        .then((res) => {
+            statusCode = res.status;
+            return res.json();
+        })
+        .then((data) => {
+            if (statusCode == 406)
+                return submitError("The shortened URL you selected is already taken. Try something more unusual.");
+            const host = window.location.hostname;
+            const protocol = window.location.protocol;
+            const port = window.location.port;
+            shortUrl = data.urlCode ? `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}` : undefined;
+            output.value = shortUrl;
+            oriurl.textContent = `Your shortened URL goes to: ${data.longUrl}`;
+            if (line.style.display == "none" && outputBox.style.display == "none" && logo.style.display == "block") {
+                outputBox.style.display = "block";
+                logo.style.display = "none";
+                line.style.display = "block";
+            }
+        })
+        .catch((e) => {
+            submitError("Sorry, there was an unexpected error or timeout when submitting your request.");
+        });
+});
+
+input.addEventListener("keyup", (event) => {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        submitbutton.click();
+    }
+});
+
+copyBtn.addEventListener("click", () => {
+    output.focus();
+    output.setSelectionRange(0, shortUrl.length);
+    setTimeout(() => output.setSelectionRange(0, 0), 1_500);
+    if (shortUrl) return copyTextToClipboard(shortUrl);
+});
+
+function fallbackCopyTextToClipboard(text) {
+    let textArea = document.createElement("textarea");
+    textArea.value = text;
+
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.position = "fixed";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        document.execCommand("copy");
+    } catch (err) {}
+
+    document.body.removeChild(textArea);
+}
+function copyTextToClipboard(text) {
+    if (!navigator.clipboard) return fallbackCopyTextToClipboard(text);
+    navigator.clipboard.writeText(text);
+    copyBtn.textContent = "Copied";
+    setTimeout(() => (copyBtn.textContent = "Copy"), 1_500);
+}
+
 function submitError(errortext) {
-    var createformlabel = document.getElementById("createformlabel");
-    if (createformlabel) createformlabel.style.display = "none";
+    const createformlabel = document.getElementById("errortext");
+    if (createformlabel.style.display == "none") createformlabel.style.display = "block";
+    outputBox.style.display = "none";
+    logo.style.display = "block";
+    line.style.display = "none";
     document.getElementById("errortext").innerHTML = errortext;
 }
 
 function submitForm() {
-    var thisform = document.getElementById("mainform");
-    if (!thisform.url && thisform.url.value.length < 4) {
+    let thisform = document.getElementById("mainform");
+    if (!input.value && input.value.length < 4) {
         submitError("Please enter a valid URL to shorten.");
-        thisform.url.focus();
-        thisform.url.select();
+        input.focus();
+        input.select();
         return false;
     }
 
-    var protoregex = /^([-A-Za-z0-9]{1,15}:)/;
-    var urlregex = /.\../;
-    var test = thisform.url.value.search(urlregex);
-    var test2 = thisform.url.value.search(protoregex);
-    // var precheck = 0;
+    let protoregex = /^([-A-Za-z0-9]{1,15}:)/;
+    let urlregex = /.\../;
+    let test = input.value.search(urlregex);
+    let test2 = input.value.search(protoregex);
+    let precheck = 0;
 
     if (test2 == -1 && test == -1) {
         submitError("Please enter a valid URL to shorten.");
-        thisform.url.focus();
-        thisform.url.select();
+        input.focus();
+        input.select();
         return false;
     }
 
-    fetch({ method: "POST", url: thisform.action, body: { url: thisform.url.value } }).then((data) => {
-        console.log(data);
-    });
-
-    if (thisform.shorturl.value.length) {
-        if (thisform.shorturl.value.length > 30 || thisform.shorturl.value.length < 5) {
+    if (shorturlbox.value.length) {
+        if (shorturlbox.value.length > 30 || shorturlbox.value.length < 5) {
             submitError("Custom short URLs must be between 5 and 30 characters long.");
-            thisform.shorturl.focus();
-            thisform.shorturl.select();
+            shorturlbox.focus();
+            shorturlbox.select();
             return false;
         }
-        var shorturlregex = /^[a-zA-Z0-9_]+$/;
-        test = thisform.shorturl.value.search(shorturlregex);
+        let shorturlregex = /^[a-zA-Z0-9_]+$/;
+        test = shorturlbox.value.search(shorturlregex);
         if (test == -1) {
             submitError("Custom short URLs can only contain alphanumeric characters and underscores.");
-            thisform.shorturl.focus();
-            thisform.shorturl.select();
+            shorturlbox.focus();
+            shorturlbox.select();
             return false;
         }
         precheck = 1;
     }
 
     if (precheck) {
-        var xhr;
-        var url = encodeURIComponent(document.mainform.url.value);
-        var shorturl = encodeURIComponent(document.mainform.shorturl.value);
-        var params = "shorturl=" + shorturl;
-        //var params="url="+url+"&shorturl="+shorturl+"&format=int1";
-        if (window.XMLHttpRequest) {
-            xhr = new XMLHttpRequest();
-        } // for older IE 5/6
-        else {
-            xhr = new ActiveXObject("Microsoft.XMLHTTP");
-        }
+        let xhr;
+        let url = encodeURIComponent(document.querySelector(".urlbox").value);
+        let shorturl = encodeURIComponent(shorturlbox.value);
+        let params = "shorturl=" + shorturl;
+        //let params="url="+url+"&shorturl="+shorturl+"&format=int1";
+        if (window.XMLHttpRequest) xhr = new XMLHttpRequest();
+        // for older IE 5/6
+        else xhr = new ActiveXObject("Microsoft.XMLHTTP");
+
         if (!xhr) return true;
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if (xhr.status == 406) {
                     submitError("The shortened URL you selected is already taken. Try something more unusual.");
-                    document.getElementById("mainform").shorturl.focus();
-                    document.getElementById("mainform").shorturl.select();
+                    shorturlbox.focus();
+                    shorturlbox.select();
                     //document.getElementById("shorturl").focus();
                     return false;
                 }
@@ -90,42 +194,41 @@ function submitForm() {
 }
 
 function shortURLChanged() {
-    var thisform = document.getElementById("mainform");
-    var options = document.getElementById("options");
+    let options = document.getElementById("options");
 
-    if (thisform.shorturl.value.length > 0) options.style.display = "none";
+    if (shorturlbox.value.length > 0) options.style.display = "none";
     else options.style.display = "block";
 }
 
 function shorturlon() {
-    var box;
-    var label;
-    var label2;
-    var label3;
-    var options;
-    var statsopt;
+    let box;
+    let label;
+    let label2;
+    let label3;
+    let options;
+    let statsopt;
     box = document.getElementById("shorturlboxcontainer");
     label = document.getElementById("shorturllabel");
     label2 = document.getElementById("shorturllabel2");
     label3 = document.getElementById("shorturllabel3");
     options = document.getElementById("options");
-    statsopt = document.getElementById("statsopt");
+    // statsopt = document.getElementById("statsopt");
     label.style.display = "none";
     label2.style.display = "block";
     label3.style.display = "none";
     box.style.display = "block";
     options.style.display = "block";
-    statsopt.style.display = "block";
-    document.mainform.shorturl.focus();
+    // statsopt.style.display = "block";
+    document.querySelector(".shorturlbox").focus();
 }
 function shorturloff() {
-    var box;
-    var label;
-    var label2;
-    var label3;
-    var options;
-    var statsopt;
-    var radiobutton = document.getElementById("r1");
+    let box;
+    let label;
+    let label2;
+    let label3;
+    let options;
+    let statsopt;
+    let radiobutton = document.getElementById("r1");
     radiobutton.checked = true;
     box = document.getElementById("shorturlboxcontainer");
     label = document.getElementById("shorturllabel");
@@ -139,5 +242,5 @@ function shorturloff() {
     box.style.display = "none";
     options.style.display = "none";
     // statsopt.style.display = "none";
-    document.mainform.shorturl.value = "";
+    document.querySelector(".shorturlbox").value = "";
 }

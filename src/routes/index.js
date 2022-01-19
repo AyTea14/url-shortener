@@ -14,19 +14,19 @@ const routes = (app) => {
     app.use(bodyParser.json());
     app.use(cors());
     app.use(express.urlencoded({ extended: false }));
-    app.use(express.static("src/public"));
-    // app.use(express.static("src/views"));
+    // app.use(express.static("src/public"));
+    app.use(express.static("src/views"));
     app.set("view engine", "ejs");
     app.set("views", path.join(process.cwd(), "src/views"));
 
-    app.get("/", async (req, res) => res.sendFile(path.join(`${__dirname}/../public/index.html`)));
-    // app.get("/", async (req, res) => {
-    //     let shortURLs = await shortenURLs.find();
-    //     let clicks = 0;
-    //     shortURLs.forEach(({ clicks: click }) => (clicks += click));
+    // app.get("/", async (req, res) => res.sendFile(path.join(`${__dirname}/../public/index.html`)));
+    app.get("/", async (req, res) => {
+        let shortURLs = await shortenURLs.find();
+        let clicks = 0;
+        shortURLs.forEach(({ clicks: click }) => (clicks += click));
 
-    //     res.render("index", { shortURLs, clicks });
-    // });
+        res.render("index", { shortURLs, clicks });
+    });
     app.use("/", redirectRoute);
     app.use("/api/url", apiRoute);
 };

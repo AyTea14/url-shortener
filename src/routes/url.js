@@ -38,7 +38,12 @@ router.post("/shorten", async (req, res) => {
                     });
                 }
             }
+            let existed = await Url.exists({ urlCode });
             let url = await Url.findOne({ longUrl });
+            if (existed)
+                return res
+                    .status(406)
+                    .json({ error: "The shortened URL you selected is already taken. Try something more unusual." });
             if (url) return res.json(url);
             else {
                 url = new Url({ longUrl, urlCode, date: new Date().toISOString() });
