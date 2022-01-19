@@ -193,12 +193,12 @@ function submitForm() {
     return true;
 }
 
-function shortURLChanged() {
-    let options = document.getElementById("options");
+// function shortURLChanged() {
+//     let options = document.getElementById("options");
 
-    if (shorturlbox.value.length > 0) options.style.display = "none";
-    else options.style.display = "block";
-}
+//     if (shorturlbox.value.length > 0) options.style.display = "none";
+//     else options.style.display = "block";
+// }
 
 function shorturlon() {
     let box;
@@ -211,13 +211,13 @@ function shorturlon() {
     label = document.getElementById("shorturllabel");
     label2 = document.getElementById("shorturllabel2");
     label3 = document.getElementById("shorturllabel3");
-    options = document.getElementById("options");
+    // options = document.getElementById("options");
     // statsopt = document.getElementById("statsopt");
     label.style.display = "none";
     label2.style.display = "block";
     label3.style.display = "none";
     box.style.display = "block";
-    options.style.display = "block";
+    // options.style.display = "block";
     // statsopt.style.display = "block";
     document.querySelector(".shorturlbox").focus();
 }
@@ -228,19 +228,19 @@ function shorturloff() {
     let label3;
     let options;
     let statsopt;
-    let radiobutton = document.getElementById("r1");
-    radiobutton.checked = true;
+    // let radiobutton = document.getElementById("r1");
+    // radiobutton.checked = true;
     box = document.getElementById("shorturlboxcontainer");
     label = document.getElementById("shorturllabel");
     label2 = document.getElementById("shorturllabel2");
     label3 = document.getElementById("shorturllabel3");
-    options = document.getElementById("options");
+    // options = document.getElementById("options");
     // statsopt = document.getElementById("statsopt");
     label.style.display = "block";
     label2.style.display = "none";
     label3.style.display = "none";
     box.style.display = "none";
-    options.style.display = "none";
+    // options.style.display = "none";
     // statsopt.style.display = "none";
     document.querySelector(".shorturlbox").value = "";
 }
