@@ -228,8 +228,8 @@ button {
     display: flex;
 }
 button.copy_button {
-    font-size: 20px;
-    width: 70px;
+    font-size: 15px;
+    width: 90px;
     margin-left: 7px;
 }
 .oriurl {
@@ -333,7 +333,7 @@ body a.memsetlink:hover {
     }
     .copy_button {
         font-size: 20px;
-        width: 70px;
+        width: 90px;
         margin-right: 20px;
     }
 }
