@@ -38,17 +38,28 @@ router.post("/shorten", async (req, res) => {
                     });
                 }
             }
+            let custom_slug = shorturl ? true : false;
             let existed = await Url.exists({ urlCode });
             let url = await Url.findOne({ longUrl });
             if (existed)
                 return res
                     .status(406)
                     .json({ error: "The shortened URL you selected is already taken. Try something more unusual." });
-            if (url) return res.json(url);
-            else {
-                url = new Url({ longUrl, urlCode, date: new Date().toISOString() });
+            if (custom_slug && !url) {
+                await new Url({ longUrl, urlCode: nanoid(), date: new Date().toISOString(), custom_slug: false }).save();
+                url = new Url({ longUrl, urlCode, date: new Date().toISOString(), custom_slug });
                 await url.save();
-                res.json(url);
+                return res.json(url);
+            } else if (custom_slug && url) {
+                url = new Url({ longUrl, urlCode, date: new Date().toISOString(), custom_slug });
+                await url.save();
+                return res.json(url);
+            } else if (url) {
+                return res.json(url);
+            } else {
+                url = new Url({ longUrl, urlCode, date: new Date().toISOString(), custom_slug });
+                await url.save();
+                return res.json(url);
             }
         } catch (err) {
             res.status(500).send({ error: "Server error" });

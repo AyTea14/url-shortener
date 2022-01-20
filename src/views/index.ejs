@@ -53,25 +53,16 @@
                         size="30"
                         name="shorturl"
                         value=""
-                        onchange="shortURLChanged()"
-                        onkeyup="shortURLChanged()"
-                        onmouseout="shortURLChanged()"
                     />
                 </div>
-                <!-- <div id="options" style="display: none; margin-bottom: 10px">
-                    <input type="radio" name="opt" id="r1" value="0" checked="checked" /><label for="r1">Standard</label
-                    ><input type="radio" name="opt" id="r2" value="1" /><label for="r2">Lower case</label
-                    ><input type="radio" name="opt" id="r3" value="2" /><label for="r3">Lower case pronounceable</label>
-                </div> -->
 
-                <button type="submit" class="submitbutton">Shorten!</button>
+                <button type="submit" class="submitbutton">Shorten</button>
 
                 <div id="count">
                     Shortening <b> <%= locals.shortURLs.length %> </b> URLs<br />That have been accessed
                     <b> <%= locals.clicks %> </b> times
                 </div>
             </div>
-            <div id="push"></div>
         </div>
         <script type="text/javascript"></script>
         <script type="text/javascript" src="createform.js"></script>
