@@ -7,6 +7,7 @@ const line = document.querySelector("#line");
 const copyBtn = document.querySelector(".copy_button");
 const input = document.querySelector(".urlbox");
 const shorturlbox = document.querySelector(".shorturlbox");
+const short_url = document.querySelector("#short_url");
 let shortUrl, statusCode;
 
 submitbutton.addEventListener("click", () => {
@@ -53,7 +54,10 @@ submitbutton.addEventListener("click", () => {
             const protocol = window.location.protocol;
             const port = window.location.port;
             shortUrl = data.urlCode ? `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}` : undefined;
+            if (!shortUrl) return submitError("Please enter a valid URL to shorten.");
             output.value = shortUrl;
+            short_url.textContent = shortUrl;
+            short_url.href = shortUrl;
             oriurl.textContent = `Your shortened URL goes to: ${data.longUrl}`;
             if (line.style.display == "none" && outputBox.style.display == "none" && logo.style.display == "block") {
                 outputBox.style.display = "block";
@@ -74,11 +78,15 @@ input.addEventListener("keyup", (event) => {
 });
 
 copyBtn.addEventListener("click", () => {
-    output.focus();
-    output.setSelectionRange(0, shortUrl.length);
-    setTimeout(() => output.setSelectionRange(0, 0), 1_500);
     if (shortUrl) return copyTextToClipboard(shortUrl);
 });
+
+// copyBtn.addEventListener("click", () => {
+//     output.focus();
+//     output.setSelectionRange(0, shortUrl.length);
+//     setTimeout(() => output.setSelectionRange(0, 0), 1_500);
+//     if (shortUrl) return copyTextToClipboard(shortUrl);
+// });
 
 function fallbackCopyTextToClipboard(text) {
     let textArea = document.createElement("textarea");
