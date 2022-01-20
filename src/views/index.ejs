@@ -44,18 +44,20 @@
                     <div class="oriurl" style="margin-bottom: 20px"></div>
                 </div>
                 <hr id="line" style="display: none; margin-bottom: 20px" />
-                <img src="https://i.imgur.com/Kyuq2IM.png" class="logo" style="display: block" />
+                <img src="https://i.imgur.com/Kyuq2IM.png" class="logo" style="display: block; user-select: none" />
 
                 <div id="errortext" style="display: none"></div>
                 <div id="urlboxcontainer">
                     <input type="url" class="urlbox" size="55" name="longUrl" value="" onfocus="this.select()" />
                 </div>
-                <div id="shorturllabel" style="display: block; margin-bottom: 10px">
+                <div id="shorturllabel" style="display: block; margin-bottom: 10px; user-select: none">
                     <label onclick="shorturlon()">Further options/custom URL&#9660;</label>
                 </div>
-                <div id="shorturllabel2" style="display: none"><label onclick="shorturloff()">&#9650;</label></div>
+                <div id="shorturllabel2" style="display: none; user-select: none">
+                    <label onclick="shorturloff()">&#9650;</label>
+                </div>
                 <div id="shorturllabel3" style="display: none"><label>&nbsp;</label></div>
-                <div id="shorturlboxcontainer" style="display: none; margin-bottom: 15px">
+                <div id="shorturlboxcontainer" style="display: none; margin-bottom: 15px; user-select: none">
                     https://shrt.ml/<input
                         type="text"
                         class="shorturlbox"
