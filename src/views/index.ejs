@@ -11,6 +11,15 @@
         <meta name="description" content="The ethical URL shortener with no registration required." />
         <link rel="stylesheet" type="text/css" href="/style.css" media="screen" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <!-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+        <script type="text/javascript">
+            $(function () {
+                $(document).on("click", "input[type=url]", function () {
+                    this.select();
+                });
+            });
+        </script> -->
+
         <script language="JavaScript" type="text/javascript">
             function focusbox() {
                 document.querySelector(".urlbox").focus();
@@ -27,7 +36,7 @@
                 <div class="shorten_url" style="display: none; margin-top: 20px; margin-left: 20px">
                     <p><b>Your shortened URL is:</b></p>
                     <div class="copy_container">
-                        <input type="text" id="short_url" readonly value="" />
+                        <input type="url" id="short_url" readonly value="" onfocus="this.select()" />
                         <button class="copy_button">Copy</button>
                     </div>
                     <br />
@@ -38,7 +47,15 @@
 
                 <div id="errortext" style="display: none"></div>
                 <div id="urlboxcontainer">
-                    <input type="url" class="urlbox" maxlength="5000" size="55" name="longUrl" value="" />
+                    <input
+                        type="url"
+                        class="urlbox"
+                        maxlength="5000"
+                        size="55"
+                        name="longUrl"
+                        value=""
+                        onfocus="this.select()"
+                    />
                 </div>
                 <div id="shorturllabel" style="display: block; margin-bottom: 10px">
                     <label onclick="shorturlon()">Further options/custom URL&#9660;</label>
