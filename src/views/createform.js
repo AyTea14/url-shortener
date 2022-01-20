@@ -78,7 +78,7 @@ input.addEventListener("keyup", (event) => {
 });
 
 copyBtn.addEventListener("click", () => {
-    if (shortUrl) return copyTextToClipboard(shortUrl);
+    if (shortUrl) copyTextToClipboard(shortUrl);
 });
 
 // copyBtn.addEventListener("click", () => {
