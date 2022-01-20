@@ -108,10 +108,10 @@ function copyTextToClipboard(text) {
 function submitError(errortext) {
     const createformlabel = document.getElementById("errortext");
     if (createformlabel.style.display == "none") createformlabel.style.display = "block";
-    outputBox.style.display = "none";
-    logo.style.display = "block";
-    line.style.display = "none";
     document.getElementById("errortext").innerHTML = errortext;
+    setTimeout(() => {
+        document.getElementById("errortext").innerHTML = "";
+    }, 3000);
 }
 
 function submitForm() {
