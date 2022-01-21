@@ -1,7 +1,6 @@
 {
   "name": "url-shortener",
   "version": "1.0.0",
-  "description": "",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
@@ -18,5 +17,18 @@
     "is-url": "^1.2.4",
     "mongoose": "^5.12.2",
     "nanoid": "^3.1.30"
-  }
+  },
+  "devDependencies": {
+    "node": "^16.13.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AyTea14/url-shortener.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/AyTea14/url-shortener/issues"
+  },
+  "homepage": "https://github.com/AyTea14/url-shortener#readme",
+  "description": ""
 }
