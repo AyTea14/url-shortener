@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="keywords"
+            content="URL shortener,shorten,URL,link,smaller,shorter,hyperlink,shorten web address,v.gd,is.gd"
+        />
+        <meta name="description" content="The ethical URL shortener with no registration required." />
+        <link rel="stylesheet" type="text/css" href="/style.css" media="screen" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+        <title>Info for <%= locals.shortURL %></title>
+    </head>
+    <body>
+        <div id="wrapper" style="margin-top: 20px; margin-left: 20px">
+            <div id="main">
+                <p style="font-size: large"><b>Shortened link</b></p>
+                <p>
+                    The link you followed has been shortened with shrt.ml. Shortened links can go anywhere on the Internet so
+                    you shouldn't continue if you got the link from a suspicious source e.g. junk email.
+                </p>
+                <p>
+                    The full original link for
+                    <span
+                        ><a href="<%= locals.shortURL %>" target="_blank" rel="noopener noreferrer"
+                            ><b><%= locals.shortURL %></b></a
+                        ></span
+                    >
+                    is shown below. <b>Click the link</b> if you'd like to proceed to the destination shown: -<br /><br />
+                    <a href="<%= locals.longURL %>" class="biglink" target="_blank"><%= locals.longURL %></a>
+                </p>
+            </div>
+        </div>
+    </body>
+</html>
