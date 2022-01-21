@@ -25,12 +25,18 @@
                 <p>
                     The full original link for
                     <span
+                        style="
+                            overflow-wrap: break-word;
+                            word-wrap: break-word;
+                            -ms-word-break: break-all;
+                            word-break: break-all;
+                        "
                         ><a href="<%= locals.shortURL %>" target="_blank" rel="noopener noreferrer"
-                            ><b><%= locals.shortURL %></b></a
+                            ><%= locals.shortURL %></a
                         ></span
                     >
                     is shown below. <b>Click the link</b> if you'd like to proceed to the destination shown: -<br /><br />
-                    <a href="<%= locals.longURL %>" class="biglink" target="_blank"><b><%= locals.longURL %></b></a>
+                    <a href="<%= locals.longURL %>" class="biglink" target="_blank"><%= locals.longURL %></a>
                 </p>
             </div>
         </div>

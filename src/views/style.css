@@ -12,12 +12,12 @@ p {
     font-size: 11px;
 }
 .biglink {
-    font-size: 22px;
+    font-size: 18px;
     overflow-wrap: break-word;
     word-wrap: break-word;
     -ms-word-break: break-all;
     word-break: break-all;
-    word-break: break-word;
+    /* word-break: break-word; */
 }
 .ioslink {
     font-size: 30px;
@@ -54,8 +54,8 @@ img.floatLeft {
     height: auto !important;
     height: 100%;
     margin: 0 auto -34px;
-    /* background: -moz-linear-gradient(top, #fff, #dfd);
-    background: -webkit-gradient(linear, center top, center bottom, from(#fff), to(#dfd)); */
+    background: -moz-linear-gradient(top, rgb(35, 39, 42), rgb(55, 59, 62));
+    background: -webkit-gradient(linear, center top, center bottom, from(rgb(35, 39, 42)), to(rgb(55, 59, 62)));
 }
 img.logo {
     display: block;
@@ -204,7 +204,8 @@ button.copy_button {
     margin-top: 15px;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    word-break: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
     color: #fff;
 }
 /* input#short_url {
@@ -222,7 +223,7 @@ a#short_url {
     font-family: verdana, serif;
     background-color: rgba(0, 0, 0, 0);
     border: hidden;
-    margin-top: 2.5px;
+    margin-top: 2.8px;
 }
 button.submitbutton {
     margin-bottom: 10px;
@@ -238,7 +239,9 @@ body {
     height: 100%;
     font-family: verdana, serif;
     min-width: 460px;
-    background: #23272a;
+    /* background: #23272a; */
+    background: -moz-linear-gradient(top, rgb(35, 39, 42), rgb(55, 59, 62));
+    background: -webkit-gradient(linear, center top, center bottom, from(rgb(35, 39, 42)), to(rgb(55, 59, 62)));
 }
 body hr {
     border-top: 1px solid #fff;
@@ -264,14 +267,14 @@ body p {
 }
 body a:link {
     text-decoration: none;
-    color: rgb(170, 170, 170);
+    color: rgb(200, 200, 200);
 }
 body a:visited {
-    text-decoration: underline;
-    color: rgb(170, 170, 170);
+    text-decoration: none;
+    color: rgb(200, 200, 200);
 }
 body a:hover {
-    text-decoration: underline;
+    text-decoration: none;
     color: rgb(240, 240, 240);
 }
 body {
@@ -288,7 +291,7 @@ body span.reg {
     margin-bottom: 10px;
     color: #fff;
 }
-@media screen and (max-width: 512px) {
+@media screen and (max-width: 480px) {
     .copy_container#short_url {
         width: auto;
     }
