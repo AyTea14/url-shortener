@@ -39,7 +39,8 @@ const routes = (app) => {
         if (!shortURL) return res.render("error");
         let longURL = `${shortURL.longUrl}`;
         let short = `https://shrt.ml/${shortURL.urlCode}`;
-        let createdAt = new Date(shortURL.date).toUTCString();
+        let date = new Date(shortURL.date);
+        let createdAt = new Intl.DateTimeFormat("en-GB", { dateStyle: "full", timeStyle: "long" }).format(date);
 
         res.render("stats", { shortURL: short, clicked: shortURL.clicks, longURL, createdAt });
     });
