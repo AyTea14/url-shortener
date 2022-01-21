@@ -40,7 +40,6 @@ const routes = (app) => {
         let longURL = `${shortURL.longUrl}`;
         let short = `https://shrt.ml/${shortURL.urlCode}`;
         let createdAt = new Date(shortURL.date).toUTCString();
-        console.log(createdAt);
 
         res.render("stats", { shortURL: short, clicked: shortURL.clicks, longURL, createdAt });
     });
