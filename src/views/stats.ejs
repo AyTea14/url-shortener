@@ -8,7 +8,10 @@
             name="keywords"
             content="URL shortener,shorten,URL,link,smaller,shorter,hyperlink,shorten web address,v.gd,is.gd"
         />
-        <meta name="description" content="Created on <%= locals.createdAt %> adn has been clicked for <%= locals.clicked %> times." />
+        <meta
+            name="description"
+            content="Created on <%= locals.createdAt %> adn has been clicked for <%= locals.clicked %> times."
+        />
         <link rel="stylesheet" type="text/css" href="/style.css" media="screen" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
@@ -32,10 +35,8 @@
                             -ms-word-break: break-all;
                             word-break: break-all;
                         "
-                        ><a href="<%= locals.longURL %>" target="_blank" rel="noopener noreferrer"></a>
-                            <%= locals.longURL %></a
-                        ></span
-                    >
+                        ><a href="<%= locals.longURL %>" target="_blank" rel="noopener noreferrer"><%= locals.longURL %></a>
+                    </span>
                     <br />
                     <br />
                     It was created on <%= locals.createdAt %>
