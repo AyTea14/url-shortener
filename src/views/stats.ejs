@@ -17,15 +17,27 @@
     <body>
         <div id="wrapper" style="margin-top: 20px; margin-left: 20px">
             <div id="main">
-                <p style="font-size: large"><b>Statistic for <%= locals.shortURL %></b></p>
+                <h1 ><b>Link Statistics</b></h1>
 
                 <p>
+                    This shortened link (<span
+                        ><a href="<%= locals.shortURL %>" target="_blank" rel="noopener noreferrer"
+                            ><b><%= locals.shortURL %></b></a
+                        ></span
+                    >) redirects to: <br />
+                    <a href="<%= locals.longURL %>" target="_blank" rel="noopener noreferrer"
+                        ><b> <%= locals.longURL %></b></a
+                    ></span
+                >
+                    <br />
+                    <br />
+                    It was created on <%= locals.createdAt %> 
+                    <br /><br />
                     <span
                         ><a href="<%= locals.shortURL %>" target="_blank" rel="noopener noreferrer"
                             ><b><%= locals.shortURL %></b></a
                         ></span
-                    >
-                    has been clicked <b><%= locals.clicked %></b> times
+                    > has been clicked for <%= locals.clicked %> times
                 </p>
             </div>
         </div>

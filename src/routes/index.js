@@ -37,9 +37,12 @@ const routes = (app) => {
     app.get("/:code/stats", async (req, res) => {
         let shortURL = await shortenURLs.findOne({ urlCode: req.params.code });
         if (!shortURL) return res.render("error");
+        let longURL = `${shortURL.longUrl}`;
         let short = `https://shrt.ml/${shortURL.urlCode}`;
+        let createdAt = new Date(shortURL.date).toUTCString();
+        console.log(createdAt);
 
-        res.render("stats", { shortURL: short, clicked: shortURL.clicks });
+        res.render("stats", { shortURL: short, clicked: shortURL.clicks, longURL, createdAt });
     });
     app.use("/", redirectRoute);
     app.use("/api/url", apiRoute);
