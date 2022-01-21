@@ -272,7 +272,7 @@ body a:visited {
 }
 body a:hover {
     text-decoration: underline;
-    color: #fff;
+    color: rgb(240, 240, 240);
 }
 body {
     text-align: center;
