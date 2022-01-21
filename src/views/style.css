@@ -222,6 +222,7 @@ a#short_url {
     font-family: verdana, serif;
     background-color: rgba(0, 0, 0, 0);
     border: hidden;
+    margin-top: 2.5px;
 }
 button.submitbutton {
     margin-bottom: 10px;
@@ -263,15 +264,15 @@ body p {
 }
 body a:link {
     text-decoration: none;
-    color: #fff;
+    color: rgb(170, 170, 170);
 }
 body a:visited {
     text-decoration: underline;
-    color: rgb(199, 199, 199);
+    color: rgb(170, 170, 170);
 }
 body a:hover {
     text-decoration: underline;
-    color: rgb(140, 140, 140);
+    color: #fff;
 }
 body {
     text-align: center;
