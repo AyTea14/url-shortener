@@ -22,10 +22,24 @@ const routes = (app) => {
     // app.get("/", async (req, res) => res.sendFile(path.join(`${__dirname}/../public/index.html`)));
     app.get("/", async (req, res) => {
         let shortURLs = await shortenURLs.find();
-        let clicks = 0;
-        shortURLs.forEach(({ clicks: click }) => (clicks += click));
+        let clicks = shortURLs.reduce((previous, current) => previous + current.clicks, 0);
 
         res.render("index", { shortURLs, clicks });
+    });
+    app.get("/:code/info", async (req, res) => {
+        let shortURL = await shortenURLs.findOne({ urlCode: req.params.code });
+        if (!shortURL) return res.render("error");
+        let longURL = `${shortURL.longUrl}`;
+        shortURL = `https://shrt.ml/${shortURL.urlCode}`;
+
+        res.render("info", { shortURL, longURL });
+    });
+    app.get("/:code/stats", async (req, res) => {
+        let shortURL = await shortenURLs.findOne({ urlCode: req.params.code });
+        if (!shortURL) return res.render("error");
+        let short = `https://shrt.ml/${shortURL.urlCode}`;
+
+        res.render("stats", { shortURL: short, clicked: shortURL.clicks });
     });
     app.use("/", redirectRoute);
     app.use("/api/url", apiRoute);
