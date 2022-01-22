@@ -208,15 +208,6 @@ button.copy_button {
     word-break: break-all;
     color: #fff;
 }
-/* input#short_url {
-    width: 420px;
-    width: auto;
-    font-size: 20px;
-    font-family: verdana, serif;
-    background-color: rgba(0, 0, 0, 0);
-    border: hidden;
-    color: white;
-} */
 a#short_url {
     width: auto;
     font-size: 20px;
