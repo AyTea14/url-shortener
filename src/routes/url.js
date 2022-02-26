@@ -15,16 +15,10 @@ router.post("/shorten", async (req, res) => {
 
     if (!longUrl) return res.send({ error: "Please enter a URL" });
 
-    try {
-        longUrl = new URL(`${longUrl}`);
-    } catch (error) {
-        if (error.code === "ERR_INVALID_URL") return res.status(401).send({ error: "Invalid longUrl" });
-    }
-
     const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 8));
     const urlCode = shorturl ? shorturl : nanoid();
 
-    if (isUrl(longUrl.href)) {
+    if (isUrl(longUrl)) {
         try {
             if (shorturl && shorturl.length) {
                 if (shorturl.length > 30 || shorturl.length < 5) {
@@ -41,6 +35,7 @@ router.post("/shorten", async (req, res) => {
             let custom_slug = shorturl ? true : false;
             let existed = await Url.exists({ urlCode });
             let url = await Url.findOne({ longUrl });
+
             if (existed)
                 return res
                     .status(406)
