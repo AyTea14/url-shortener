@@ -5,7 +5,7 @@ const URLSchema = new mongoose.Schema({
     longUrl: { type: String, required: true },
     custom_slug: { type: Boolean, default: false },
     clicks: { type: Number, required: true, default: 0 },
-    date: { type: String, default: Date.now },
+    date: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Url", URLSchema);

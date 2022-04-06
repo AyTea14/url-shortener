@@ -4,7 +4,10 @@ const isUrl = require("is-url");
 const { customAlphabet } = require("nanoid");
 const Url = require("../models/Url");
 const { randomRange } = require("../utils/functions");
-// const baseUrl = process.env.DOMAIN || "https://shorten.aytea14.repl.co";
+const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 8));
+// const {
+//     Types: { ObjectId },
+// } = require("mongoose");
 
 router.post("/shorten", async (req, res) => {
     let longUrl, shorturl;
@@ -15,8 +18,7 @@ router.post("/shorten", async (req, res) => {
 
     if (!longUrl) return res.send({ error: "Please enter a URL" });
 
-    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 8));
-    const urlCode = shorturl ? shorturl : nanoid();
+    let urlCode = await chooseKey((key) => key);
 
     if (isUrl(longUrl)) {
         try {
@@ -33,7 +35,7 @@ router.post("/shorten", async (req, res) => {
                 }
             }
             let custom_slug = shorturl ? true : false;
-            let existed = await Url.exists({ urlCode });
+            let existed = custom_slug && (await Url.exists({ urlCode }));
             let url = await Url.findOne({ longUrl });
 
             if (existed)
@@ -41,18 +43,18 @@ router.post("/shorten", async (req, res) => {
                     .status(406)
                     .json({ error: "The shortened URL you selected is already taken. Try something more unusual." });
             if (custom_slug && !url) {
-                await new Url({ longUrl, urlCode: nanoid(), date: new Date().toISOString(), custom_slug: false }).save();
-                url = new Url({ longUrl, urlCode, date: new Date().toISOString(), custom_slug });
+                await new Url({ longUrl, urlCode: await chooseKey((s) => s), date: new Date(), custom_slug: false }).save();
+                url = new Url({ longUrl, urlCode, date: new Date(), custom_slug });
                 await url.save();
                 return res.json(url);
             } else if (custom_slug && url) {
-                url = new Url({ longUrl, urlCode, date: new Date().toISOString(), custom_slug });
+                url = new Url({ longUrl, urlCode, date: new Date(), custom_slug });
                 await url.save();
                 return res.json(url);
             } else if (url) {
                 return res.json(url);
             } else {
-                url = new Url({ longUrl, urlCode, date: new Date().toISOString(), custom_slug });
+                url = new Url({ longUrl, urlCode, date: new Date(), custom_slug });
                 await url.save();
                 return res.json(url);
             }
@@ -61,5 +63,15 @@ router.post("/shorten", async (req, res) => {
         }
     } else return res.status(401).send({ error: "Invalid longUrl" });
 });
+
+/**
+ * @param {()=>{}} cb
+ * @returns {string}
+ */
+async function chooseKey(cb) {
+    let key = nanoid();
+    let isExisted = await Url.exists({ urlCode: key });
+    return isExisted ? chooseKey(cb) : cb(key);
+}
 
 module.exports = router;
