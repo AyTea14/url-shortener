@@ -38,11 +38,11 @@ router.get("/:code/stats", async (req, res) => {
     let longURL = `${shortURL.longUrl}`;
     let short = `https://shrt.ml/${shortURL.urlCode}`;
     let date = new Date(shortURL.date);
-    let createdAt = new Intl.DateTimeFormat("en-GB", {
+    let createdAt = new Date(date).toLocaleString("en-GB", {
         dateStyle: "full",
         timeStyle: "long",
-        timeZone: "Europe/London",
-    }).format(date);
+        timeZone: "UTC",
+    });
 
     res.render("stats", { shortURL: short, clicked: shortURL.clicks, longURL, createdAt });
 });

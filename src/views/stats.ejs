@@ -4,18 +4,12 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta
-            name="keywords"
-            content="URL shortener,shorten,URL,link,smaller,shorter,hyperlink,shorten web address,v.gd,is.gd"
-        />
-        <meta
-            name="description"
-            content="Created on <%= locals.createdAt %> and have been accessed <%= locals.clicked %> times."
-        />
+        <meta name="keywords" content="URL shortener,shorten,URL,link,smaller,shorter,hyperlink,shorten web address,v.gd,is.gd" />
+        <meta name="description" content="Link statistics" />
         <link rel="stylesheet" type="text/css" href="/style.css" media="screen" />
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
 
-        <title><%= locals.shortURL %></title>
+        <title>shrt.ml | Link statistics</title>
     </head>
     <body>
         <div id="wrapper" style="margin-top: 20px; margin-left: 20px">
@@ -29,12 +23,7 @@
                         ></span
                     >) redirects to: <br />
                     <span
-                        style="
-                            overflow-wrap: break-word;
-                            word-wrap: break-word;
-                            -ms-word-break: break-all;
-                            word-break: break-all;
-                        "
+                        style="overflow-wrap: break-word; word-wrap: break-word; -ms-word-break: break-all; word-break: break-all"
                         ><a href="<%= locals.longURL %>" target="_blank" rel="noopener noreferrer"><%= locals.longURL %></a>
                     </span>
                     <br />

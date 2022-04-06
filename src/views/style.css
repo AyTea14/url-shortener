@@ -265,7 +265,7 @@ body a:visited {
     color: rgb(200, 200, 200);
 }
 body a:hover {
-    text-decoration: none;
+    text-decoration: underline;
     color: rgb(240, 240, 240);
 }
 body {
