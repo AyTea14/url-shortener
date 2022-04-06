@@ -4,7 +4,7 @@ const isUrl = require("is-url");
 const { customAlphabet } = require("nanoid");
 const Url = require("../models/Url");
 const { randomRange } = require("../utils/functions");
-const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 8));
+const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 7));
 // const {
 //     Types: { ObjectId },
 // } = require("mongoose");
@@ -18,7 +18,7 @@ router.post("/shorten", async (req, res) => {
 
     if (!longUrl) return res.send({ error: "Please enter a URL" });
 
-    let urlCode = await chooseKey((key) => key);
+    let urlCode = shorturl ? shorturl : await chooseKey((key) => key);
 
     if (isUrl(longUrl)) {
         try {
@@ -38,13 +38,14 @@ router.post("/shorten", async (req, res) => {
             let existed = custom_slug && (await Url.exists({ urlCode }));
             let url = await Url.findOne({ longUrl });
 
-            if (existed)
+            if (existed) {
                 return res
                     .status(406)
                     .json({ error: "The shortened URL you selected is already taken. Try something more unusual." });
+            }
             if (custom_slug && !url) {
                 await new Url({ longUrl, urlCode: await chooseKey((s) => s), date: new Date(), custom_slug: false }).save();
-                url = new Url({ longUrl, urlCode, date: new Date(), custom_slug });
+                url = new Url({ longUrl, urlCode, date: new Date(), custom_slug: true });
                 await url.save();
                 return res.json(url);
             } else if (custom_slug && url) {
