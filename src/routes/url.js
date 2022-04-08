@@ -26,7 +26,7 @@ router.post("/shorten", async (req, res) => {
                 if (shorturl.length > 30 || shorturl.length < 5) {
                     return res.send({ error: "Custom short URLs must be between 5 and 30 characters long." });
                 }
-                var shorturlregex = /^[a-zA-Z0-9_]+$/;
+                var shorturlregex = /^[a-zA-Z0-9_-]+$/;
                 let test = shorturl.search(shorturlregex);
                 if (test == -1) {
                     return res.send({
@@ -53,7 +53,7 @@ router.post("/shorten", async (req, res) => {
                 await url.save();
                 return res.json(url);
             } else if (url) {
-                return res.json(url);
+                return res.json(await Url.findOne({ longUrl, custom_slug: false }));
             } else {
                 url = new Url({ longUrl, urlCode, date: new Date(), custom_slug });
                 await url.save();
