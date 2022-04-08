@@ -27,7 +27,7 @@ router.get("/:code/info", async (req, res) => {
     let shortURL = await Url.findOne({ urlCode: req.params.code });
     if (!shortURL) return res.render("error");
     let longURL = `${shortURL.longUrl}`;
-    shortURL = `https://shrt.ml/${shortURL.urlCode}`;
+    shortURL = `${req.headers["x-forwarded-proto"] ? "https" : "http"}://${req.get("host")}/${shortURL.urlCode}`;
 
     res.render("info", { shortURL, longURL });
 });
@@ -36,7 +36,7 @@ router.get("/:code/stats", async (req, res) => {
     let shortURL = await Url.findOne({ urlCode: req.params.code });
     if (!shortURL) return res.render("error");
     let longURL = `${shortURL.longUrl}`;
-    let short = `https://shrt.ml/${shortURL.urlCode}`;
+    let short = `${req.headers["x-forwarded-proto"] ? "https" : "http"}://${req.get("host")}/${shortURL.urlCode}`;
     let date = new Date(shortURL.date);
     let createdAt = new Date(date).toLocaleString("en-GB", {
         dateStyle: "full",
