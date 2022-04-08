@@ -28,7 +28,7 @@ submitbutton.addEventListener("click", () => {
             shorturlbox.select();
             return false;
         }
-        let shorturlregex = /^[a-zA-Z0-9_]+$/;
+        let shorturlregex = /^[a-zA-Z0-9_-]+$/;
         test = shorturlbox.value.search(shorturlregex);
         if (test == -1) {
             submitError("Custom short URLs can only contain alphanumeric characters and underscores.");
@@ -151,7 +151,7 @@ function submitForm() {
             shorturlbox.select();
             return false;
         }
-        let shorturlregex = /^[a-zA-Z0-9_]+$/;
+        let shorturlregex = /^[a-zA-Z0-9_-]+$/;
         test = shorturlbox.value.search(shorturlregex);
         if (test == -1) {
             submitError("Custom short URLs can only contain alphanumeric characters and underscores.");
