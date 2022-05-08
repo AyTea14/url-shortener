@@ -1,13 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const isUrl = require("is-url");
-const { customAlphabet } = require("nanoid");
 const Url = require("../models/Url");
-const { randomRange } = require("../utils/functions");
-const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", randomRange(6, 7));
-// const {
-//     Types: { ObjectId },
-// } = require("mongoose");
+const { createId } = require("../utils/functions");
 
 router.post("/shorten", async (req, res) => {
     let longUrl, shorturl;
@@ -67,10 +62,9 @@ router.post("/shorten", async (req, res) => {
 
 /**
  * @param {()=>{}} cb
- * @returns {string}
  */
 async function chooseKey(cb) {
-    let key = nanoid();
+    let key = createId();
     let isExisted = await Url.exists({ urlCode: key });
     return isExisted ? chooseKey(cb) : cb(key);
 }
