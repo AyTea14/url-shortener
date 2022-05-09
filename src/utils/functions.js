@@ -1,4 +1,4 @@
-let processId = randomRange(0, 0xff + 1);
+let processId = randomRange(0, 0xf + 1);
 let machineId = randomRange(0, 0xff + 1);
 let increment = 0;
 
@@ -34,7 +34,7 @@ module.exports = {
         increment++;
         if (increment > 0xf) {
             increment = 0;
-            processId = randomRange(0, 0xff + 1);
+            processId = randomRange(0, 0xf + 1);
             machineId = randomRange(0, 0xff + 1);
         }
         return parseInt(time + machine_id + process_id + increment.toString(16), 16).toString(36);
@@ -42,9 +42,9 @@ module.exports = {
     decodeId: (id) => {
         id = parseInt(id, 36).toString(16);
         let time = parseInt(`0x${id.substring(0, 8)}`);
-        let process_id = parseInt(`0x${id.substring(8, 10)}`);
-        let machine_id = parseInt(`0x${id.substring(10, 12)}`);
-        let increments = parseInt(`0x${id.substring(12, 13)}`);
+        let process_id = parseInt(`0x${id.substring(8, 9)}`);
+        let machine_id = parseInt(`0x${id.substring(9, 11)}`);
+        let increments = parseInt(`0x${id.substring(11, 12)}`);
         return { time, processId: process_id, machineId: machine_id, increment: increments };
     },
 };
