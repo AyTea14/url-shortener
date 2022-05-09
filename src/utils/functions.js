@@ -29,7 +29,7 @@ module.exports = {
         let time = parseInt(~~(Date.now() / 1000))
             .toString(16)
             .padEnd(8, "0");
-        let process_id = parseInt(processId).toString(16).padStart(2, "0");
+        let process_id = parseInt(processId).toString(16).padStart(1, "0");
         let machine_id = parseInt(machineId).toString(16).padStart(2, "0");
         increment++;
         if (increment > 0xf) {
