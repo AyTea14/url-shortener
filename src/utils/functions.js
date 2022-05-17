@@ -1,4 +1,4 @@
-let processId = randomRange(0, 0xf + 1);
+let processId = randomRange(0, 0xff + 1);
 let machineId = randomRange(0, 0xff + 1);
 let increment = 0;
 
@@ -29,12 +29,12 @@ module.exports = {
         let time = parseInt(~~(Date.now() / 1000))
             .toString(16)
             .padEnd(8, "0");
-        let process_id = parseInt(processId).toString(16).padStart(1, "0");
+        let process_id = parseInt(processId).toString(16).padStart(2, "0");
         let machine_id = parseInt(machineId).toString(16).padStart(2, "0");
         increment++;
         if (increment > 0xf) {
             increment = 0;
-            processId = randomRange(0, 0xf + 1);
+            processId = randomRange(0, 0xff + 1);
             machineId = randomRange(0, 0xff + 1);
         }
         return parseInt(time + machine_id + process_id + increment.toString(16), 16).toString(36);
