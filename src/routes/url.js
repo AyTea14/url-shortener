@@ -49,7 +49,10 @@ router.post("/shorten", async (req, res) => {
                 return res.json(url);
             } else if (url) {
                 url = await Url.findOne({ longUrl, custom_slug: false });
-                if (!url) url = new Url({ longUrl, urlCode: await chooseKey((s) => s), date: new Date(), custom_slug: false });
+                if (!url) {
+                    url = new Url({ longUrl, urlCode: await chooseKey((s) => s), date: new Date(), custom_slug: false });
+                    await url.save();
+                }
                 return res.json(url);
             } else {
                 url = new Url({ longUrl, urlCode, date: new Date(), custom_slug });
