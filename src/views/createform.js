@@ -10,6 +10,10 @@ const shorturlbox = document.querySelector(".shorturlbox");
 const short_url = document.querySelector("#short_url");
 let shortUrl, statusCode;
 
+const wait = (delayInms) => {
+    return new Promise((resolve) => setTimeout(() => resolve(2), delayInms)).catch(console.log);
+};
+
 submitbutton.addEventListener("click", () => {
     let protoregex = /^([-A-Za-z0-9]{1,15}:)/;
     let urlregex = /.\../;
@@ -38,6 +42,9 @@ submitbutton.addEventListener("click", () => {
         }
     }
 
+    outputBox.style.display = "none";
+    logo.style.display = "block";
+    line.style.display = "none";
     fetch(`/api/url/shorten`, {
         method: "POST",
         body: JSON.stringify({ longUrl: `${input.value}`, shorturl: shorturlbox.value }),
@@ -47,7 +54,8 @@ submitbutton.addEventListener("click", () => {
             statusCode = res.status;
             return res.json();
         })
-        .then((data) => {
+        .then(async (data) => {
+            await wait(500)
             if (statusCode == 406)
                 return submitError("The shortened URL you selected is already taken. Try something more unusual.");
             const host = window.location.hostname;
@@ -55,10 +63,12 @@ submitbutton.addEventListener("click", () => {
             const port = window.location.port;
             shortUrl = data.urlCode ? `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}` : undefined;
             if (!shortUrl) return submitError("Please enter a valid URL to shorten.");
+
             output.value = shortUrl;
             short_url.textContent = shortUrl;
             short_url.href = shortUrl;
             oriurl.textContent = `Your shortened URL goes to: ${data.longUrl}`;
+
             if (line.style.display == "none" && outputBox.style.display == "none" && logo.style.display == "block") {
                 outputBox.style.display = "block";
                 logo.style.display = "none";
@@ -66,12 +76,19 @@ submitbutton.addEventListener("click", () => {
             }
         })
         .catch((e) => {
+            console.log(e);
             submitError("Sorry, there was an unexpected error or timeout when submitting your request.");
         });
 });
 
 input.addEventListener("keyup", (event) => {
     if (event.keyCode === 13) {
+        event.preventDefault();
+        submitbutton.click();
+    }
+});
+shorturlbox.addEventListener("keyup", (event) => {
+    if (event.keyCode == 13) {
         event.preventDefault();
         submitbutton.click();
     }
