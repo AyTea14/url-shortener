@@ -11,10 +11,6 @@ const short_url = document.querySelector("#short_url");
 const loading = document.querySelector(".lds-dual-ring");
 let shortUrl, statusCode;
 
-const wait = (delay) => {
-    return new Promise((res) => setTimeout(() => res(2), delay)).catch(console.log);
-};
-
 submitbutton.addEventListener("click", () => {
     let protoregex = /^([-A-Za-z0-9]{1,15}:)/;
     let urlregex = /.\../;
@@ -57,7 +53,6 @@ submitbutton.addEventListener("click", () => {
             return res.json();
         })
         .then(async (data) => {
-            await wait(1000);
             if (statusCode == 406)
                 return submitError("The shortened URL you selected is already taken. Try something more unusual.");
             const host = window.location.hostname;
