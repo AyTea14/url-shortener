@@ -235,7 +235,8 @@ button.copy_button {
 
 .oriurl {
     font-size: 11px;
-    margin-top: 15px;
+    margin-top: 50px;
+    margin-bottom: 20px;
     overflow-wrap: break-word;
     word-wrap: break-word;
     -ms-word-break: break-all;
@@ -344,25 +345,14 @@ body span.reg {
 }
 
 /* loader */
-/* .lds-ring {
-    display: inline-block;
-    position: relative;
-    width: 80px;
-    height: 80px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-bottom: 45px;
-    padding-top: 40px;
-} */
-
 .lds-dual-ring {
     display: inline-block;
     width: 80px;
     height: 80px;
     margin-left: auto;
     margin-right: auto;
-    padding-bottom: 50px;
-    padding-top: 35px;
+    padding-bottom: 75px;
+    padding-top: 45px;
 }
 
 .lds-dual-ring:after {
