@@ -8,7 +8,12 @@ const copyBtn = document.querySelector(".copy_button");
 const input = document.querySelector(".urlbox");
 const shorturlbox = document.querySelector(".shorturlbox");
 const short_url = document.querySelector("#short_url");
+const loading = document.querySelector(".lds-dual-ring");
 let shortUrl, statusCode;
+
+const wait = (delay) => {
+    return new Promise((res) => setTimeout(() => res(2), delay)).catch(console.log);
+};
 
 submitbutton.addEventListener("click", () => {
     let protoregex = /^([-A-Za-z0-9]{1,15}:)/;
@@ -39,8 +44,9 @@ submitbutton.addEventListener("click", () => {
     }
 
     outputBox.style.display = "none";
-    logo.style.display = "block";
+    logo.style.display = "none";
     line.style.display = "none";
+    loading.style.display = "block";
     fetch(`/api/url/shorten`, {
         method: "POST",
         body: JSON.stringify({ longUrl: `${input.value}`, shorturl: shorturlbox.value }),
@@ -50,7 +56,8 @@ submitbutton.addEventListener("click", () => {
             statusCode = res.status;
             return res.json();
         })
-        .then((data) => {
+        .then(async (data) => {
+            await wait(1000);
             if (statusCode == 406)
                 return submitError("The shortened URL you selected is already taken. Try something more unusual.");
             const host = window.location.hostname;
@@ -58,13 +65,14 @@ submitbutton.addEventListener("click", () => {
             const port = window.location.port;
             shortUrl = data.urlCode ? `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}` : undefined;
             if (!shortUrl) return submitError("Please enter a valid URL to shorten.");
+            loading.style.display = "none";
 
             output.value = shortUrl;
             short_url.textContent = shortUrl;
             short_url.href = shortUrl;
             oriurl.textContent = `Your shortened URL goes to: ${data.longUrl}`;
 
-            if (line.style.display == "none" && outputBox.style.display == "none" && logo.style.display == "block") {
+            if (line.style.display == "none" && outputBox.style.display == "none" && logo.style.display == "none") {
                 outputBox.style.display = "block";
                 logo.style.display = "none";
                 line.style.display = "block";
