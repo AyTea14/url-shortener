@@ -10,10 +10,6 @@ const shorturlbox = document.querySelector(".shorturlbox");
 const short_url = document.querySelector("#short_url");
 let shortUrl, statusCode;
 
-const wait = (delayInms) => {
-    return new Promise((resolve) => setTimeout(() => resolve(2), delayInms)).catch(console.log);
-};
-
 submitbutton.addEventListener("click", () => {
     let protoregex = /^([-A-Za-z0-9]{1,15}:)/;
     let urlregex = /.\../;
@@ -54,8 +50,7 @@ submitbutton.addEventListener("click", () => {
             statusCode = res.status;
             return res.json();
         })
-        .then(async (data) => {
-            await wait(500)
+        .then((data) => {
             if (statusCode == 406)
                 return submitError("The shortened URL you selected is already taken. Try something more unusual.");
             const host = window.location.hostname;
