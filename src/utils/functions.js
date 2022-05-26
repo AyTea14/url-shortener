@@ -1,6 +1,41 @@
-let processId = randomRange(0, 0xff + 1);
-let machineId = randomRange(0, 0xff + 1);
+let processId = randomRange(0, 0x3f);
+let machineId = randomRange(0, 0x3f);
 let increment = 0;
+const Base64 = (() => {
+    let digitsStr = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789${getRandomString(2)}`;
+    let digits = digitsStr.split("");
+    let digitsMap = {};
+    for (let i = 0; i < digits.length; i++) {
+        digitsMap[digits[i]] = i;
+    }
+    return {
+        /**
+         * @param {number} int32
+         * @returns {string}
+         */
+        fromInt: (int32) => {
+            let result = "";
+            while (true) {
+                result = digits[int32 & 0x3f] + result;
+                int32 >>>= 6;
+                if (int32 === 0) break;
+            }
+            return result;
+        },
+        /**
+         * @param {string} digitsStr
+         * @returns {number}
+         */
+        toInt: (digitsStr) => {
+            let result = 0;
+            let digits = digitsStr.split("");
+            for (let i = 0; i < digits.length; i++) {
+                result = (result << 6) + digitsMap[digits[i]];
+            }
+            return result;
+        },
+    };
+})();
 
 module.exports = {
     randomRange(min, max) {
@@ -25,29 +60,28 @@ module.exports = {
             return false;
         }
     },
-    createId: () => {
-        let time = parseInt(~~(Date.now() / 1000))
-            .toString(16)
-            .padEnd(8, "0");
-        let process_id = parseInt(processId).toString(16).padStart(2, "0");
-        let machine_id = parseInt(machineId).toString(16).padStart(2, "0");
-        increment++;
-        if (increment > 0xf) {
+    createId: (int32 = Date.now()) => {
+        const base64 = Base64.fromInt(int32);
+        let p_id = Base64.fromInt(processId);
+        let m_id = Base64.fromInt(machineId);
+        if (increment == 0x3f) {
+            processId = randomRange(0, 0x3f);
+            machineId = randomRange(0, 0x3f);
             increment = 0;
-            processId = randomRange(0, 0xff + 1);
-            machineId = randomRange(0, 0xff + 1);
         }
-        return parseInt(time + machine_id + process_id + increment.toString(16), 16).toString(36);
-    },
-    decodeId: (id) => {
-        id = parseInt(id, 36).toString(16);
-        let time = parseInt(`0x${id.substring(0, 8)}`);
-        let process_id = parseInt(`0x${id.substring(8, 9)}`);
-        let machine_id = parseInt(`0x${id.substring(9, 11)}`);
-        let increments = parseInt(`0x${id.substring(11, 12)}`);
-        return { time, processId: process_id, machineId: machine_id, increment: increments };
+        increment++;
+        return base64 + m_id + p_id + Base64.fromInt(increment);
     },
 };
+
+function getRandomString(length = 10) {
+    const randomChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+        result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+    }
+    return result;
+}
 
 function randomRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

@@ -69,7 +69,7 @@ router.post("/shorten", async (req, res) => {
  * @param {()=>{}} cb
  */
 async function chooseKey(cb) {
-    let key = createId();
+    let key = createId(Date.now());
     let isExisted = await Url.exists({ urlCode: key });
     return isExisted ? chooseKey(cb) : cb(key);
 }
