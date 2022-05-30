@@ -74,7 +74,10 @@ submitbutton.addEventListener("click", () => {
             }
         })
         .catch((e) => {
-            console.log(e);
+            outputBox.style.display = "none";
+            logo.style.display = "none";
+            line.style.display = "none";
+            loading.style.display = "block";
             submitError("Sorry, there was an unexpected error or timeout when submitting your request.");
         });
 });

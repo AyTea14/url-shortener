@@ -1,6 +1,7 @@
 let processId = randomRange(0, 0x3f);
 let machineId = randomRange(0, 0x3f);
 let increment = 0;
+
 const Base64 = (() => {
     let digitsStr = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789${getRandomString(2)}`;
     let digits = digitsStr.split("");
@@ -71,6 +72,13 @@ module.exports = {
         }
         increment++;
         return base64 + m_id + p_id + Base64.fromInt(increment);
+    },
+    /**
+     * @param {number} number
+     */
+    generateId: (number) => {
+        const base64 = Base64.fromInt(number);
+        return base64;
     },
 };
 

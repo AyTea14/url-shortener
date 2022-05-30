@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const isUrl = require("is-url");
 const Url = require("../models/Url");
-const { createId } = require("../utils/functions");
+const { createId, generateId } = require("../utils/functions");
 
 router.post("/shorten", async (req, res) => {
     let longUrl, shorturl;
@@ -69,7 +69,8 @@ router.post("/shorten", async (req, res) => {
  * @param {()=>{}} cb
  */
 async function chooseKey(cb) {
-    let key = createId(Date.now());
+    let shortURLs = await Url.find();
+    let key = generateId(shortURLs.length + 1);
     let isExisted = await Url.exists({ urlCode: key });
     return isExisted ? chooseKey(cb) : cb(key);
 }
