@@ -2,39 +2,25 @@ let processId = randomRange(0, 0x3f);
 let machineId = randomRange(0, 0x3f);
 let increment = 0;
 
-const Base64 = (() => {
-    let digitsStr = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789${getRandomString(2)}`;
-    let digits = digitsStr.split("");
-    let digitsMap = {};
-    for (let i = 0; i < digits.length; i++) {
-        digitsMap[digits[i]] = i;
-    }
+const Base62 = (() => {
+    let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split("");
     return {
-        /**
-         * @param {number} int32
-         * @returns {string}
-         */
-        fromInt: (int32) => {
-            let result = "";
-            while (true) {
-                result = digits[int32 & 0x3f] + result;
-                int32 >>>= 6;
-                if (int32 === 0) break;
+        encode: (integer) => {
+            if (integer === 0) {
+                return 0;
             }
-            return result;
-        },
-        /**
-         * @param {string} digitsStr
-         * @returns {number}
-         */
-        toInt: (digitsStr) => {
-            let result = 0;
-            let digits = digitsStr.split("");
-            for (let i = 0; i < digits.length; i++) {
-                result = (result << 6) + digitsMap[digits[i]];
+            let s = [];
+            while (integer > 0) {
+                s = [charset[integer % 62], ...s];
+                integer = Math.floor(integer / 62);
             }
-            return result;
+            return s.join("");
         },
+        decode: (chars) =>
+            chars
+                .split("")
+                .reverse()
+                .reduce((prev, curr, i) => prev + charset.indexOf(curr) * 62 ** i, 0),
     };
 })();
 
@@ -77,7 +63,7 @@ module.exports = {
      * @param {number} number
      */
     generateId: (number) => {
-        const base64 = Base64.fromInt(number);
+        const base64 = Base62.encode(number);
         return base64;
     },
 };
