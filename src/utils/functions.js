@@ -6,9 +6,8 @@ const Base62 = (() => {
     let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split("");
     return {
         encode: (integer) => {
-            if (integer === 0) {
-                return 0;
-            }
+            if (integer === 0) return 0;
+
             let s = [];
             while (integer > 0) {
                 s = [charset[integer % 62], ...s];
@@ -63,8 +62,8 @@ module.exports = {
      * @param {number} number
      */
     generateId: (number) => {
-        const base64 = Base62.encode(number);
-        return base64;
+        const base62 = Base62.encode(number);
+        return base62;
     },
 };
 
