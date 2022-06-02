@@ -60,7 +60,6 @@ router.post("/shorten", async (req, res) => {
                 return res.json(url);
             }
         } catch (err) {
-            console.log(err);
             res.status(500).send({ error: "Server error" });
         }
     } else return res.status(401).send({ error: "Invalid longUrl" });

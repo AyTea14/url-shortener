@@ -17,7 +17,8 @@
     "is-url": "^1.2.4",
     "mongoose": "^5.12.2",
     "nanoid": "^3.1.30",
-    "node-fetch": "^2.6.2"
+    "node-fetch": "^2.6.2",
+    "uglify-js": "^3.15.5"
   },
   "devDependencies": {
     "node": "^16.13.2"
@@ -31,5 +32,10 @@
     "url": "https://github.com/AyTea14/url-shortener/issues"
   },
   "homepage": "https://github.com/AyTea14/url-shortener#readme",
-  "description": ""
+  "description": "",
+  "nodemonConfig": {
+    "ignore": [
+      "src/views/createform.min.js"
+    ]
+  }
 }
