@@ -11,9 +11,9 @@ const Base62 = (() => {
 
             let s = [];
             while (integer > 0) {
-                let bigIntOrNot = typeof integer == "bigint" ? 62n : 62;
-                s = [charset[integer % bigIntOrNot], ...s];
-                integer = typeof integer == "bigint" ? integer / bigIntOrNot : Math.floor(integer / bigIntOrNot);
+                let intOrBigInt = typeof integer == "bigint" ? 62n : 62;
+                s = [charset[integer % intOrBigInt], ...s];
+                integer = typeof integer == "bigint" ? integer / intOrBigInt : Math.floor(integer / intOrBigInt);
             }
 
             return s.join("");
