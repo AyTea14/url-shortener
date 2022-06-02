@@ -1,15 +1,22 @@
 const express = require("express");
+const { default: fetch } = require("node-fetch");
 const router = express.Router();
 const Url = require("../models/Url");
 
 router.get("/", async (req, res) => {
     try {
-        let shortURLs = await Url.find();
-        let clicks = shortURLs.reduce((previous, current) => previous + current.clicks, 0);
+        const stats = await getStats(req);
 
-        res.render("index", { shortURLs, clicks });
+        res.render("index", stats);
     } catch (error) {}
 });
+router.get("/stats", async (req, res) => {
+    let shortURLs = await Url.find();
+    let clicks = shortURLs.reduce((previous, current) => previous + current.clicks, 0);
+
+    return res.status(200).json({ shortURLs: shortURLs.length, clicks });
+});
+
 router.get("/:code", async (req, res) => {
     try {
         const url = await Url.findOne({ urlCode: req.params.code });
@@ -46,5 +53,13 @@ router.get("/:code/stats", async (req, res) => {
 
     res.render("stats", { shortURL: short, clicked: shortURL.clicks, longURL, createdAt });
 });
+
+async function getStats(req) {
+    const url = `${req.headers["x-forwarded-proto"] ? "https" : "http"}://${req.get("host")}`;
+    const response = await fetch(`${url}/stats`);
+    const stats = await response.json();
+
+    return stats;
+}
 
 module.exports = router;

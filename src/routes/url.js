@@ -60,6 +60,7 @@ router.post("/shorten", async (req, res) => {
                 return res.json(url);
             }
         } catch (err) {
+            console.log(err);
             res.status(500).send({ error: "Server error" });
         }
     } else return res.status(401).send({ error: "Invalid longUrl" });
@@ -70,7 +71,7 @@ router.post("/shorten", async (req, res) => {
  */
 async function chooseKey(cb) {
     let shortURLs = await Url.find();
-    let key = generateId(shortURLs.length + 1);
+    let key = generateId(shortURLs.length);
     let isExisted = await Url.exists({ urlCode: key });
     return isExisted ? chooseKey(cb) : cb(key);
 }

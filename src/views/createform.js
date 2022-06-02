@@ -1,14 +1,15 @@
-const output = document.querySelector("#short_url");
 const submitbutton = document.querySelector(".submitbutton");
 const outputBox = document.querySelector(".shorten_url");
 const logo = document.querySelector(".logo");
 const oriurl = document.querySelector(".oriurl");
-const line = document.querySelector("#line");
 const copyBtn = document.querySelector(".copy_button");
 const input = document.querySelector(".urlbox");
 const shorturlbox = document.querySelector(".shorturlbox");
 const short_url = document.querySelector("#short_url");
 const loading = document.querySelector(".lds-dual-ring");
+const output = document.querySelector("#short_url");
+const line = document.querySelector("#line");
+const count = document.querySelector("#count");
 let shortUrl, statusCode;
 
 submitbutton.addEventListener("click", () => {
@@ -72,12 +73,18 @@ submitbutton.addEventListener("click", () => {
                 logo.style.display = "none";
                 line.style.display = "block";
             }
+            fetch("/stats")
+                .then((res) => res.json())
+                .then((data) => {
+                    count.innerHTML = `Shortening <b> ${data.shortURLs} </b> URLs<br />That have been accessed
+                <b> ${data.clicks} </b> times`;
+                });
         })
         .catch((e) => {
             outputBox.style.display = "none";
-            logo.style.display = "none";
+            logo.style.display = "block";
             line.style.display = "none";
-            loading.style.display = "block";
+            loading.style.display = "none";
             submitError("Sorry, there was an unexpected error or timeout when submitting your request.");
         });
 });
@@ -135,6 +142,10 @@ function submitError(errortext) {
     const createformlabel = document.getElementById("errortext");
     if (createformlabel.style.display == "none") createformlabel.style.display = "block";
     document.getElementById("errortext").innerHTML = errortext;
+    outputBox.style.display = "none";
+    logo.style.display = "block";
+    line.style.display = "none";
+    loading.style.display = "none";
     setTimeout(() => {
         document.getElementById("errortext").innerHTML = "";
     }, 3000);

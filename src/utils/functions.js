@@ -6,13 +6,16 @@ const Base62 = (() => {
     let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split("");
     return {
         encode: (integer) => {
-            if (integer === 0) return 0;
+            integer = Number.isSafeInteger(integer) ? integer : BigInt(integer);
+            if (integer === 0 || (typeof integer == "bigint" && integer === 0n)) return charset[0];
 
             let s = [];
             while (integer > 0) {
-                s = [charset[integer % 62], ...s];
-                integer = Math.floor(integer / 62);
+                let bigIntOrNot = typeof integer == "bigint" ? 62n : 62;
+                s = [charset[integer % bigIntOrNot], ...s];
+                integer = typeof integer == "bigint" ? integer / bigIntOrNot : Math.floor(integer / bigIntOrNot);
             }
+
             return s.join("");
         },
         decode: (chars) =>
