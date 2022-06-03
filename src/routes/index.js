@@ -4,6 +4,7 @@ const path = require("path");
 const cors = require("cors");
 const apiRoute = require("./url");
 const redirectRoute = require("./redirect");
+const Url = require("../models/Url");
 
 /**
  * @param {app} app

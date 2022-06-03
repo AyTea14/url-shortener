@@ -3,7 +3,7 @@ let machineId = randomRange(0, 0x3f);
 let increment = 0;
 
 const Base62 = (() => {
-    let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split("");
+    let charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     return {
         encode: (integer) => {
             integer = Number.isSafeInteger(integer) ? integer : BigInt(integer);
