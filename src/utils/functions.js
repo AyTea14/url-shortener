@@ -22,7 +22,13 @@ const Base62 = (() => {
             chars
                 .split("")
                 .reverse()
-                .reduce((prev, curr, i) => prev + charset.indexOf(curr) * 62 ** i, 0),
+                .reduce((prev, curr, i) => {
+                    const decoded = prev + charset.indexOf(curr) * 62 ** i;
+                    if (typeof decoded == "bigint" || !Number.isSafeInteger(decoded)) {
+                        return BigInt(decoded);
+                    }
+                    return decoded;
+                }, 0),
     };
 })();
 
@@ -34,7 +40,7 @@ module.exports = {
         return Math.floor(Math.random() * Math.floor(max));
     },
     getRandomString: (length = 10) => {
-        const randomChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
+        const randomChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         let result = "";
         for (let i = 0; i < length; i++) {
             result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
@@ -49,18 +55,18 @@ module.exports = {
             return false;
         }
     },
-    createId: (int32 = Date.now()) => {
-        const base64 = Base64.fromInt(int32);
-        let p_id = Base64.fromInt(processId);
-        let m_id = Base64.fromInt(machineId);
-        if (increment == 0x3f) {
-            processId = randomRange(0, 0x3f);
-            machineId = randomRange(0, 0x3f);
-            increment = 0;
-        }
-        increment++;
-        return base64 + m_id + p_id + Base64.fromInt(increment);
-    },
+    // createId: (int32 = Date.now()) => {
+    //     const base64 = Base64.fromInt(int32);
+    //     let p_id = Base64.fromInt(processId);
+    //     let m_id = Base64.fromInt(machineId);
+    //     if (increment == 0x3f) {
+    //         processId = randomRange(0, 0x3f);
+    //         machineId = randomRange(0, 0x3f);
+    //         increment = 0;
+    //     }
+    //     increment++;
+    //     return base64 + m_id + p_id + Base64.fromInt(increment);
+    // },
     /**
      * @param {number} number
      */
