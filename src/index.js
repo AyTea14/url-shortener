@@ -4,16 +4,17 @@ const app = express();
 const routes = require("./routes/index");
 const uglify = require("uglify-js");
 const { readdirSync, readFileSync, writeFileSync } = require("fs");
+const { extname } = require("path");
 
 let list = readdirSync("./src/views");
 for (let j = 0; j < list.length; j++) {
     let item = list[j];
     if (item.indexOf(".js") === item.length - 3 && item.indexOf(".min.js") === -1) {
-        let dest = item.substring(0, item.length - 3) + ".min" + item.substring(item.length - 3);
+        let dest = item.replace(extname(item), "") + ".min" + extname(item);
         let orig_code = readFileSync(`./src/views/${item}`, "utf8");
 
-        writeFileSync(`./src/views/${dest}`, uglify.minify(orig_code).code, "utf8");
-        console.log(`"compressed ${item} into ${dest}`);
+        writeFileSync(`./src/views/${dest}`, uglify.minify(orig_code, { ie8: true }).code, "utf8");
+        console.log(`Compressed ${item} into ${dest}`);
     }
 }
 
