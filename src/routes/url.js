@@ -34,9 +34,7 @@ router.post("/shorten", async (req, res) => {
             let url = await Url.findOne({ longUrl });
 
             if (existed) {
-                return res
-                    .status(406)
-                    .json({ error: "The shortened URL you selected is already taken. Try something more unusual." });
+                return res.status(406).json({ error: "The shortened URL you selected is already taken. Try something more unusual." });
             }
             if (custom_slug && !url) {
                 await new Url({ longUrl, urlCode: await chooseKey((s) => s), date: new Date(), custom_slug: false }).save();
@@ -69,7 +67,8 @@ router.post("/shorten", async (req, res) => {
  * @param {()=>{}} cb
  */
 async function chooseKey(cb) {
-    let shortURLs = await Url.find({ custom_slug: false });
+    let shortURLs = await Url.find();
+    shortURLs = shortURLs.filter((x) => x.custom_slug !== true);
     let key = generateId(shortURLs.length);
     let isExisted = await Url.exists({ urlCode: key });
     return isExisted ? chooseKey(cb) : cb(key);
