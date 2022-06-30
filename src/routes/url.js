@@ -67,8 +67,7 @@ router.post("/shorten", async (req, res) => {
  * @param {()=>{}} cb
  */
 async function chooseKey(cb) {
-    let shortURLs = await Url.find();
-    shortURLs = shortURLs.filter((x) => x.custom_slug !== true);
+    let shortURLs = await Url.find({ custom_slug: false });
     let key = generateId(shortURLs.length);
     let isExisted = await Url.exists({ urlCode: key });
     return isExisted ? chooseKey(cb) : cb(key);
