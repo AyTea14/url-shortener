@@ -54,8 +54,7 @@ submitbutton.addEventListener("click", () => {
             return res.json();
         })
         .then(async (data) => {
-            if (statusCode == 406)
-                return submitError("The shortened URL you selected is already taken. Try something more unusual.");
+            if (statusCode == 406) return submitError("The shortened URL you selected is already taken. Try something more unusual.");
             const host = window.location.hostname;
             const protocol = window.location.protocol;
             const port = window.location.port;
@@ -73,12 +72,6 @@ submitbutton.addEventListener("click", () => {
                 logo.style.display = "none";
                 line.style.display = "block";
             }
-            fetch("/stats")
-                .then((res) => res.json())
-                .then((data) => {
-                    count.innerHTML = `Shortening <b> ${data.shortURLs} </b> URLs<br />That have been accessed
-                <b> ${data.clicks} </b> times`;
-                });
         })
         .catch((e) => {
             outputBox.style.display = "none";

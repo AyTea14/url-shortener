@@ -3,6 +3,7 @@ const router = express.Router();
 const Url = require("../models/Url");
 
 router.get("/", async (req, res) => {
+    // await Url.updateMany({ increment: { $exists: true } }, { $unset: { increment: 1 } })
     try {
         let shortURLs = await Url.find();
         let clicks = shortURLs.reduce((previous, current) => previous + current.clicks, 0);

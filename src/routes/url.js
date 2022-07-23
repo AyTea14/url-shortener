@@ -1,8 +1,9 @@
+const { randomInt } = require("crypto");
 const express = require("express");
 const router = express.Router();
 const isUrl = require("is-url");
 const Url = require("../models/Url");
-const { createId, generateId } = require("../utils/functions");
+const { randomString } = require("../utils/functions");
 
 router.post("/shorten", async (req, res) => {
     let longUrl, shorturl;
@@ -13,7 +14,7 @@ router.post("/shorten", async (req, res) => {
 
     if (!longUrl) return res.send({ error: "Please enter a URL" });
 
-    let urlCode = shorturl ? shorturl : await chooseKey((key) => key);
+    let urlCode = shorturl ? shorturl : await chooseKey((x) => x);
 
     if (isUrl(longUrl)) {
         try {
@@ -30,14 +31,14 @@ router.post("/shorten", async (req, res) => {
                 }
             }
             let custom_slug = shorturl ? true : false;
-            let existed = custom_slug && (await Url.exists({ urlCode }));
+            let customSlugExisted = custom_slug && (await Url.exists({ urlCode }));
             let url = await Url.findOne({ longUrl });
 
-            if (existed) {
+            if (customSlugExisted) {
                 return res.status(406).json({ error: "The shortened URL you selected is already taken. Try something more unusual." });
             }
             if (custom_slug && !url) {
-                await new Url({ longUrl, urlCode: await chooseKey((s) => s), date: new Date(), custom_slug: false }).save();
+                await new Url({ longUrl, urlCode: await chooseKey((x) => x), date: new Date(), custom_slug: false }).save();
                 url = new Url({ longUrl, urlCode, date: new Date(), custom_slug: true });
                 await url.save();
                 return res.json(url);
@@ -48,7 +49,7 @@ router.post("/shorten", async (req, res) => {
             } else if (url) {
                 url = await Url.findOne({ longUrl, custom_slug: false });
                 if (!url) {
-                    url = new Url({ longUrl, urlCode: await chooseKey((s) => s), date: new Date(), custom_slug: false });
+                    url = new Url({ longUrl, urlCode: await chooseKey((x) => x), date: new Date(), custom_slug: false });
                     await url.save();
                 }
                 return res.json(url);
@@ -67,8 +68,7 @@ router.post("/shorten", async (req, res) => {
  * @param {()=>{}} cb
  */
 async function chooseKey(cb) {
-    let shortURLs = await Url.find({ custom_slug: false });
-    let key = generateId(shortURLs.length);
+    let key = randomString(randomInt(6, 8));
     let isExisted = await Url.exists({ urlCode: key });
     return isExisted ? chooseKey(cb) : cb(key);
 }

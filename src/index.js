@@ -26,5 +26,5 @@ connection.once("open", () => console.log("DB Connected"));
 connection.on("error", () => console.log("DB Error"));
 
 //Listen for incoming requests
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001
 app.listen(PORT, console.log(`Server started, listening on http://127.0.0.1:${PORT}`));
