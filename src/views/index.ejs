@@ -61,11 +61,12 @@
                 <button type="submit" class="submitbutton">Shorten</button>
 
                 <div id="count">
-                    Shortening <b> <%= locals.shortURLs %> </b> URLs<br />That have been accessed
-                    <b> <%= locals.clicks %> </b> times
+                    Shortening <b id="urls"> <%= locals.shortURLs %> </b> URLs<br />That have been accessed
+                    <b id="clicks"> <%= locals.clicks %> </b> times
                 </div>
             </div>
         </div>
+        <script src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="createform.min.js"></script>
     </body>
 </html>

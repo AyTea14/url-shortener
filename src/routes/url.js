@@ -64,6 +64,13 @@ router.post("/shorten", async (req, res) => {
     } else return res.status(401).send({ error: "Invalid longUrl" });
 });
 
+router.get("/stats", async (req, res) => {
+    const shortURLs = await Url.find();
+    let clicks = shortURLs.reduce((previous, current) => previous + current.clicks, 0);
+
+    return res.json({ shortURLs: shortURLs.length, clicks });
+});
+
 /**
  * @param {()=>{}} cb
  */

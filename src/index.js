@@ -3,8 +3,12 @@ const express = require("express");
 const app = express();
 const routes = require("./routes/index");
 const uglify = require("uglify-js");
+const http = require("http").Server(app);
+const { Server } = require("socket.io");
 const { readdirSync, readFileSync, writeFileSync } = require("fs");
 const { extname } = require("path");
+
+const io = new Server(http);
 
 let list = readdirSync("./src/views");
 for (let j = 0; j < list.length; j++) {
@@ -18,13 +22,19 @@ for (let j = 0; j < list.length; j++) {
     }
 }
 
-routes(app);
+routes(app, io);
 
 // Database config
 const connection = require("./config/db.config");
 connection.once("open", () => console.log("DB Connected"));
 connection.on("error", () => console.log("DB Error"));
 
+io.on("connection", (socket) => {
+    socket.on("new_shortURL_data", (shortURLs) => {
+        io.emit("new_shortURL_data", shortURLs);
+    });
+});
+
 //Listen for incoming requests
-const PORT = process.env.PORT || 3001
-app.listen(PORT, console.log(`Server started, listening on http://127.0.0.1:${PORT}`));
+const PORT = process.env.PORT || 3001;
+http.listen(PORT, () => console.log(`Server started, listening on http://127.0.0.1:${PORT}`));

@@ -9,7 +9,9 @@ const short_url = document.querySelector("#short_url");
 const loading = document.querySelector(".lds-dual-ring");
 const output = document.querySelector("#short_url");
 const line = document.querySelector("#line");
-const count = document.querySelector("#count");
+const urls = document.querySelector("#count #urls");
+const clicks = document.querySelector("#count #clicks");
+const socket = io();
 let shortUrl, statusCode;
 
 submitbutton.addEventListener("click", () => {
@@ -61,6 +63,18 @@ submitbutton.addEventListener("click", () => {
             shortUrl = data.urlCode ? `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}` : undefined;
             if (!shortUrl) return submitError("Please enter a valid URL to shorten.");
             loading.style.display = "none";
+
+            if (shortUrl) {
+                fetch("/api/url/stats")
+                    .then((res) => res.json())
+                    .then((data) => {
+                        socket.emit("new_shortURL_data", data);
+                        socket.on("new_shortURL_data", (data) => {
+                            urls.textContent = data.shortURLs;
+                            clicks.textContent = data.clicks;
+                        });
+                    });
+            }
 
             output.value = shortUrl;
             short_url.textContent = shortUrl;

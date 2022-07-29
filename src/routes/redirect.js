@@ -1,6 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const Url = require("../models/Url");
+const { default: request } = require("@aytea/request");
+
+// const client = require("..");
+// console.log(client);
+
+router.get("/:code", async (req, res) => {
+    try {
+        const url = await Url.findOne({ urlCode: req.params.code });
+        if (!url) return res.status(404).render("error");
+
+        url.clicks++;
+        url.save();
+
+        const data = await request(`http://${req.get("host")}/api/url/stats`).json();
+        req.io.emit("new_shortURLs_data", data);
+
+        return res.redirect(url.longUrl);
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Server Error");
+    }
+});
 
 router.get("/", async (req, res) => {
     // await Url.updateMany({ increment: { $exists: true } }, { $unset: { increment: 1 } })
@@ -12,19 +34,6 @@ router.get("/", async (req, res) => {
     } catch (error) {}
 });
 
-router.get("/:code", async (req, res) => {
-    try {
-        const url = await Url.findOne({ urlCode: req.params.code });
-        if (!url) return res.status(404).render("error");
-
-        url.clicks++;
-        url.save();
-
-        return res.redirect(url.longUrl);
-    } catch (err) {
-        res.status(500).send("Server Error");
-    }
-});
 router.get("/:code/info", async (req, res) => {
     let shortURL = await Url.findOne({ urlCode: req.params.code });
     if (!shortURL) return res.render("error");
