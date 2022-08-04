@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Url = require("../models/Url");
-const { default: request } = require("@aytea/request");
-
-// const client = require("..");
-// console.log(client);
 
 router.get("/:code", async (req, res) => {
     try {
@@ -14,12 +10,8 @@ router.get("/:code", async (req, res) => {
         url.clicks++;
         url.save();
 
-        const data = await request(`http://${req.get("host")}/api/url/stats`).json();
-        req.io.emit("new_shortURLs_data", data);
-
         return res.redirect(url.longUrl);
     } catch (err) {
-        console.log(err);
         res.status(500).send("Server Error");
     }
 });

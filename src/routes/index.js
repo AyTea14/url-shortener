@@ -15,10 +15,7 @@ const routes = (app, io) => {
     app.use(cors());
     app.use(express.urlencoded({ extended: false }));
     app.use(express.static("src/views"));
-    app.use((req, res, next) => {
-        req.io = io;
-        next();
-    });
+    
     app.set("view engine", "ejs");
     app.set("views", path.resolve(process.cwd(), "src/views"));
 

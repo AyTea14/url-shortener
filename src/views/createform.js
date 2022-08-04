@@ -11,8 +11,16 @@ const output = document.querySelector("#short_url");
 const line = document.querySelector("#line");
 const urls = document.querySelector("#count #urls");
 const clicks = document.querySelector("#count #clicks");
-const socket = io();
 let shortUrl, statusCode;
+
+setInterval(() => {
+    fetch("/api/url/stats")
+        .then((res) => res.json())
+        .then((data) => {
+            urls.textContent = data.shortURLs;
+            clicks.textContent = data.clicks;
+        });
+}, 1000);
 
 submitbutton.addEventListener("click", () => {
     let protoregex = /^([-A-Za-z0-9]{1,15}:)/;
@@ -63,18 +71,6 @@ submitbutton.addEventListener("click", () => {
             shortUrl = data.urlCode ? `${protocol}//${host}${port ? `:${port}` : ""}/${data.urlCode}` : undefined;
             if (!shortUrl) return submitError("Please enter a valid URL to shorten.");
             loading.style.display = "none";
-
-            if (shortUrl) {
-                fetch("/api/url/stats")
-                    .then((res) => res.json())
-                    .then((data) => {
-                        socket.emit("new_shortURL_data", data);
-                        socket.on("new_shortURL_data", (data) => {
-                            urls.textContent = data.shortURLs;
-                            clicks.textContent = data.clicks;
-                        });
-                    });
-            }
 
             output.value = shortUrl;
             short_url.textContent = shortUrl;

@@ -8,8 +8,6 @@ const { Server } = require("socket.io");
 const { readdirSync, readFileSync, writeFileSync } = require("fs");
 const { extname } = require("path");
 
-const io = new Server(http);
-
 let list = readdirSync("./src/views");
 for (let j = 0; j < list.length; j++) {
     let item = list[j];
@@ -22,18 +20,12 @@ for (let j = 0; j < list.length; j++) {
     }
 }
 
-routes(app, io);
+routes(app);
 
 // Database config
 const connection = require("./config/db.config");
 connection.once("open", () => console.log("DB Connected"));
 connection.on("error", () => console.log("DB Error"));
-
-io.on("connection", (socket) => {
-    socket.on("new_shortURL_data", (shortURLs) => {
-        io.emit("new_shortURL_data", shortURLs);
-    });
-});
 
 //Listen for incoming requests
 const PORT = process.env.PORT || 3001;
