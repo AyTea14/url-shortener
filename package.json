@@ -6,7 +6,7 @@
     "start": "node src/index.js",
     "devStart": "nodemon src/index.js"
   },
-  "author": "ReactifyStudio",
+  "author": "",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.19.1",
