@@ -4,7 +4,6 @@ const app = express();
 const routes = require("./routes/index");
 const uglify = require("uglify-js");
 const http = require("http").Server(app);
-const { Server } = require("socket.io");
 const { readdirSync, readFileSync, writeFileSync } = require("fs");
 const { extname } = require("path");
 
