@@ -7,15 +7,14 @@ const redirectRoute = require("./redirect");
 
 /**
  * @param {app} app
- * @param {import('socket.io').Server} io
  * @return {app}
  */
-const routes = (app, io) => {
+const routes = (app) => {
     app.use(express.json());
     app.use(cors());
     app.use(express.urlencoded({ extended: false }));
     app.use(express.static("src/views"));
-    
+
     app.set("view engine", "ejs");
     app.set("views", path.resolve(process.cwd(), "src/views"));
 
