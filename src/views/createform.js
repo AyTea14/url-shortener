@@ -11,16 +11,13 @@ const output = document.querySelector("#short_url");
 const line = document.querySelector("#line");
 const urls = document.querySelector("#count #urls");
 const clicks = document.querySelector("#count #clicks");
+const socket = io();
 let shortUrl, statusCode;
 
-setInterval(() => {
-    fetch("/api/url/stats")
-        .then((res) => res.json())
-        .then((data) => {
-            urls.textContent = data.shortURLs;
-            clicks.textContent = data.clicks;
-        });
-}, 1000);
+socket.on("shortURLs_data", (data) => {
+    urls.textContent = data.shortURLs;
+    clicks.textContent = data.clicks;
+});
 
 submitbutton.addEventListener("click", () => {
     let protoregex = /^([-A-Za-z0-9]{1,15}:)/;
