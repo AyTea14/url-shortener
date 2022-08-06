@@ -10,7 +10,7 @@ router.get("/:code", async (req, res) => {
         url.clicks++;
         url.save();
 
-        return res.redirect(url.longUrl);
+        return res.redirect(301, url.longUrl);
     } catch (err) {
         res.status(500).send("Server Error");
     }
