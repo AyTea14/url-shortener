@@ -1,3 +1,5 @@
+const { randomInt } = require("crypto");
+
 let processId = randomRange(0, 0x3f);
 let machineId = randomRange(0, 0x3f);
 let increment = 0;
@@ -43,7 +45,7 @@ module.exports = {
         const randomChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
         let result = "";
         for (let i = 0; i < length; i++) {
-            result += randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+            result += randomChars.charAt(randomInt(randomChars.length));
         }
         return result;
     },

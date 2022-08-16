@@ -2,9 +2,30 @@ const express = require("express");
 const router = express.Router();
 const Url = require("../models/Url");
 
+router.get("/:code~", async (req, res) => {
+    try {
+        let { code } = req.params;
+        const shortURL = await Url.findOne({ urlCode: code });
+        if (!shortURL) return res.status(404).render("error");
+        let longURL = `${shortURL.longUrl}`;
+        let short = `${req.headers["x-forwarded-proto"] ? "https" : "http"}://${req.get("host")}/${shortURL.urlCode}`;
+        let date = new Date(shortURL.date);
+        let createdAt = new Date(date).toLocaleString("en-GB", {
+            dateStyle: "full",
+            timeStyle: "long",
+            timeZone: "UTC",
+        });
+
+        return res.render("stats", { shortURL: short, clicked: shortURL.clicks, longURL, createdAt });
+    } catch (err) {console.log(err)
+        res.status(500).send("Server Error");
+    }
+});
+
 router.get("/:code", async (req, res) => {
     try {
-        const url = await Url.findOne({ urlCode: req.params.code });
+        let { code } = req.params;
+        const url = await Url.findOne({ urlCode: code });
         if (!url) return res.status(404).render("error");
 
         url.clicks++;
