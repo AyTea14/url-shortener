@@ -1,0 +1,31 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+      "allowSyntheticDefaultImports": true,
+      "alwaysStrict": true,
+      "declaration": true,
+      "declarationMap": true,
+      "emitDecoratorMetadata": true,
+      "esModuleInterop": true,
+      "experimentalDecorators": true,
+      "forceConsistentCasingInFileNames": true,
+      "importHelpers": true,
+      "incremental": true,
+      "moduleResolution": "Node",
+      "newLine": "lf",
+      "noEmitHelpers": true,
+      "noFallthroughCasesInSwitch": true,
+      "preserveConstEnums": true,
+      "pretty": true,
+      "removeComments": false,
+      "resolveJsonModule": true,
+      "sourceMap": true,
+      "strict": true,
+      "useDefineForClassFields": true,
+      "lib": ["es2019", "es2020.bigint", "es2020.string", "es2020.symbol.wellknown"],
+      "target": "ES2019",
+      "module": "CommonJS",
+      "noImplicitReturns": false,
+      "importsNotUsedAsValues": "preserve"
+  }
+}
