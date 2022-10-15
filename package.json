@@ -22,6 +22,7 @@
     "#root/*": "./dist/*.js"
   },
   "dependencies": {
+    "@fastify/error": "^3.0.0",
     "@prisma/client": "^4.4.0",
     "@sapphire/ts-config": "^3.3.4",
     "colorette": "^2.0.19",

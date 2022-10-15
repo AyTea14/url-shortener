@@ -5,16 +5,21 @@ import { FastifyInstance } from "fastify";
 
 export async function urls(fastify: FastifyInstance) {
     fastify
+        .route({
+            method: "GET",
+            url: "/health",
+            handler: (req, reply) => reply.code(HttpCode["OK"]).send({ health: "Ok" }),
+        })
         .route<{ Body: { url: string } }>({
             method: "POST",
             url: "/",
             handler: async function (req, reply) {
+                const baseUrl = process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`;
                 const url = req.body?.url;
                 if (!url) throw new ExtendedError("Please enter a url", HttpCode["Bad Request"]);
-                isBlockedHostname(url);
+                isBlockedHostname(url, req.hostname);
 
-                let id = await shorten(fastify, url);
-                let baseUrl = process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`;
+                const id = await shorten(fastify, url);
 
                 reply
                     .type("application/json")
@@ -42,7 +47,7 @@ export async function urls(fastify: FastifyInstance) {
             method: "GET",
             url: "/",
             handler: (req, reply) =>
-                new ExtendedError(`Route ${String(req.method).toUpperCase()}:${req.url} not found`, HttpCode["Not Found"]),
+                new ExtendedError(`Route ${String(req.raw.method).toUpperCase()}:${req.raw.url} not found`, HttpCode["Not Found"]),
         })
         .route<{ Params: { short: string } }>({
             method: "GET",

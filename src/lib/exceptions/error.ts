@@ -1,4 +1,5 @@
 import { HttpCode } from "#lib/types";
+import { STATUS_CODES } from "http";
 
 export class ExtendedError extends Error {
     statusCode: number;
@@ -7,6 +8,6 @@ export class ExtendedError extends Error {
     constructor(message: string, code: number) {
         super(message);
         this.statusCode = code;
-        this.error = HttpCode[this.statusCode]
+        this.error = STATUS_CODES[this.statusCode] as string;
     }
 }

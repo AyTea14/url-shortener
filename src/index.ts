@@ -6,7 +6,11 @@ import { Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
 
 export const logger = new Logger();
 const PORT = Number(process.env.PORT) || 3000;
-const server = fastify({ ignoreTrailingSlash: false, trustProxy: true });
+const server = fastify({
+    ignoreTrailingSlash: false,
+    trustProxy: true,
+    ignoreDuplicateSlashes: true,
+});
 server.db = new PrismaClient();
 
 (async () => {
