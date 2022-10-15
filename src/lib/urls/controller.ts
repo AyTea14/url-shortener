@@ -13,6 +13,7 @@ export async function urls(fastify: FastifyInstance) {
         .route<{ Body: { url: string } }>({
             method: "POST",
             url: "/",
+            preHandler: auth,
             handler: async function (req, reply) {
                 const baseUrl = process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`;
                 const url = req.body?.url;

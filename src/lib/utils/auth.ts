@@ -4,8 +4,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 
 export async function auth(req: FastifyRequest, reply: FastifyReply) {
     const authorization = req.headers.authorization;
-    if (authorization !== process.env.API_KEY)
-        throw new ExtendedError("The provided API key is incorrect", HttpCode["Bad Request"]);
+    if (!authorization) throw new ExtendedError("You must provide an API key to access this route", HttpCode["Unauthorized"]);
+    if (authorization !== process.env.API_KEY) throw new ExtendedError("The provided API key is incorrect", HttpCode["Unauthorized"]);
 }
 
 // function camelPad(str: string) {
