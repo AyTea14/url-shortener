@@ -1,8 +1,10 @@
 import "dotenv/config";
 import fastify from "fastify";
+import ratelimit from "@fastify/rate-limit";
 import { urls } from "#lib/urls";
 import { PrismaClient } from "@prisma/client";
 import { Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
+import { home } from "#lib/urls";
 
 export const logger = new Logger();
 const PORT = Number(process.env.PORT) || 3000;
@@ -14,6 +16,8 @@ const server = fastify({
 server.db = new PrismaClient();
 
 (async () => {
+    await server.register(ratelimit);
+    await server.register(home);
     await server.register(urls);
     await server.db.$connect();
 

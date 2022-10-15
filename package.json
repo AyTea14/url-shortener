@@ -18,11 +18,13 @@
     "#lib/utils": "./dist/lib/utils/index.js",
     "#lib/types": "./dist/lib/types/index.js",
     "#lib/exceptions": "./dist/lib/exceptions/index.js",
+    "#lib/home": "./dist/lib/home.js",
     "#lib": "./dist/lib/*.js",
     "#root/*": "./dist/*.js"
   },
   "dependencies": {
     "@fastify/error": "^3.0.0",
+    "@fastify/rate-limit": "^7.5.0",
     "@prisma/client": "^4.4.0",
     "@sapphire/ts-config": "^3.3.4",
     "colorette": "^2.0.19",
