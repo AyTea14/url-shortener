@@ -9,8 +9,8 @@ export async function urls(fastify: FastifyInstance) {
             method: "POST",
             url: "/",
             handler: async function (req, reply) {
-                const url = req.body.url;
-                if (!url) return reply.type("application/json").code(HttpCode["Bad Request"]).send({ message: "Please enter a url" });
+                const url = req.body?.url;
+                if (!url) throw new ExtendedError("Please enter a url", HttpCode["Bad Request"]);
                 isBlockedHostname(url);
 
                 let id = await shorten(fastify, url);
@@ -38,23 +38,22 @@ export async function urls(fastify: FastifyInstance) {
                 reply.type("application/json").send({ urls: data.length, visits: visitsStats });
             },
         })
+        .route({
+            method: "GET",
+            url: "/",
+            handler: (req, reply) =>
+                new ExtendedError(`Route ${String(req.method).toUpperCase()}:${req.url} not found`, HttpCode["Not Found"]),
+        })
         .route<{ Params: { short: string } }>({
             method: "GET",
             url: "/:short",
             handler: async function (req, reply) {
-                if (req.params.short === "")
-                    throw new ExtendedError(`Route ${String(req.method).toUpperCase()}:${req.url} not found`, HttpCode["Not Found"]);
-
                 const code = Buffer.from(req.params.short, "ascii").toString("base64url");
                 const data = await fastify.db.shortened.findUnique({
                     where: { code },
                     select: { url: true, visits: true },
                 });
-                if (!data)
-                    return reply
-                        .type("application/json")
-                        .code(HttpCode["Bad Request"])
-                        .send({ message: "Shortened URL not found in database" });
+                if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
                 await fastify.db.shortened.update({
                     where: { code },
@@ -73,11 +72,7 @@ export async function urls(fastify: FastifyInstance) {
                     where: { code },
                     select: { url: true, visits: true },
                 });
-                if (!data)
-                    return reply
-                        .type("application/json")
-                        .code(HttpCode["Bad Request"])
-                        .send({ message: "Shortened URL not found in database" });
+                if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
                 reply.type("application/json").send({ url: data.url, visits: data.visits.map((date) => date.getTime()) });
             },
