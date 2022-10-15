@@ -5,7 +5,8 @@ import { PrismaClient } from "@prisma/client";
 import { Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
 
 export const logger = new Logger();
-const server = fastify({ ignoreTrailingSlash: true, trustProxy: true });
+const PORT = Number(process.env.PORT) || 3000;
+const server = fastify({ ignoreTrailingSlash: false, trustProxy: true });
 server.db = new PrismaClient();
 
 (async () => {
@@ -17,7 +18,7 @@ server.db = new PrismaClient();
         .addHook("onResponse", async (_, reply) => reply.getResponseTime())
         .addHook("onResponse", reqLogger);
 
-    server.listen({ port: 3000, host: "0.0.0.0" }, (err, address) => {
+    server.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
         logger.info(`application listening at ${address}`);
     });
 })();

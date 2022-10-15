@@ -4,20 +4,29 @@ import { auth, isBlockedHostname, shorten } from "#lib/utils";
 import { FastifyInstance } from "fastify";
 
 export async function urls(fastify: FastifyInstance) {
-    fastify.post<{ Body: { url: string } }>("/", async function (req, reply) {
-        const url = req.body.url;
-        if (!url) return reply.type("application/json").code(HttpCode["Bad Request"]).send({ message: "Please enter a url" });
-        isBlockedHostname(url);
-
-        let id = await shorten(fastify, url);
-        let baseUrl = process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`;
-
-        reply
-            .type("application/json")
-            .code(HttpCode["Created"])
-            .send({ short: id, url: `${baseUrl}/${id}` });
-    });
     fastify
+        .route<{ Body: { url: string } }>({
+            method: "POST",
+            url: "/",
+            handler: async function (req, reply) {
+                const url = req.body.url;
+                if (!url) return reply.type("application/json").code(HttpCode["Bad Request"]).send({ message: "Please enter a url" });
+                isBlockedHostname(url);
+
+                let id = await shorten(fastify, url);
+                let baseUrl = process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`;
+
+                reply
+                    .type("application/json")
+                    .code(HttpCode["Created"])
+                    .send({ short: id, url: `${baseUrl}/${id}` });
+            },
+        })
+        .route({
+            method: "GET",
+            url: "/favicon.ico",
+            handler: (req, reply) => reply.code(HttpCode["No Content"]),
+        })
         .route({
             method: "GET",
             url: "/stats",
