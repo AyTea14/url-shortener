@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "type": "commonjs",
   "scripts": {
-    "build": "tsup && yarn build:config && prisma generate",
+    "build": "tsup && npm run build:config && prisma generate",
+    "build:yarn": "tsup && yarn build:config && prisma generate",
     "start": "node --experimental-json-modules ./dist/index.js",
     "build:config": "node ./scripts/blocked.js",
     "dev": "tsup --watch --onSuccess \"yarn build:config && yarn start\""
