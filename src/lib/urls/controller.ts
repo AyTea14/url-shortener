@@ -59,6 +59,7 @@ export async function urls(fastify: FastifyInstance) {
             method: "GET",
             url: "/s/:short",
             handler: async function (req, reply) {
+                const now = new Date();
                 const code = Buffer.from(req.params.short, "ascii").toString("base64url");
                 const data = await fastify.db.shortened.findUnique({
                     where: { code },
@@ -68,7 +69,7 @@ export async function urls(fastify: FastifyInstance) {
 
                 await fastify.db.shortened.update({
                     where: { code },
-                    data: { visits: { push: new Date() } },
+                    data: { visits: { push: now } },
                 });
 
                 reply.redirect(HttpCode["Permanent Redirect"], data.url);
@@ -85,7 +86,7 @@ export async function urls(fastify: FastifyInstance) {
                 });
                 if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
-                reply.type("application/json").send({ url: data.url, visits: data.visits.map((date) => date.getTime()) });
+                reply.type("application/json").send({ url: data.url, visits: data.visits });
             },
         });
 }
