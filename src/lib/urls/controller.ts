@@ -8,10 +8,7 @@ export async function home(fastify: FastifyInstance) {
         .route({
             method: "GET",
             url: "/health",
-            handler: async (req, reply) => {
-                return reply.code(HttpCode["OK"]).send(await isHealthy(fastify));
-                // reply.code(HttpCode["OK"]).send({ health: "Ok" });
-            },
+            handler: async (req, reply) => reply.code(HttpCode["OK"]).send(await isHealthy(fastify)),
         })
         .route({
             method: "GET",
