@@ -1,6 +1,6 @@
 import { bgBlue, bgCyan, bgGreen, bgMagenta, bgRed, bgWhite, bgYellow, black, whiteBright } from "colorette";
 import { randomInt } from "crypto";
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { logger } from "../../index.js";
 import prettyMs from "pretty-ms";
 
@@ -23,6 +23,34 @@ export function isURL(input: string) {
     }
 
     return /https?/.test(url.protocol);
+}
+
+export async function isHealthy(fastify: FastifyInstance) {
+    let isHealthy: boolean;
+    let prismaError: unknown;
+
+    try {
+        await fastify.db.shortened.findFirst();
+        isHealthy = true;
+    } catch (error) {
+        isHealthy = false;
+        prismaError = error;
+    }
+
+    return {
+        status: isHealthy ? "ok" : "",
+        info: {
+            database: {
+                status: !prismaError ? "up" : "down",
+            },
+        },
+        error: prismaError ? (prismaError instanceof Error ? prismaError.message : prismaError) : null,
+        details: {
+            database: {
+                status: !prismaError ? "up" : "down",
+            },
+        },
+    };
 }
 
 export function removeTrailingSlash(req: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) {

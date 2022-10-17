@@ -1,6 +1,6 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-import { auth, isBlockedHostname, shorten } from "#lib/utils";
+import { auth, isBlockedHostname, isHealthy, shorten } from "#lib/utils";
 import { FastifyInstance } from "fastify";
 
 export async function home(fastify: FastifyInstance) {
@@ -8,7 +8,10 @@ export async function home(fastify: FastifyInstance) {
         .route({
             method: "GET",
             url: "/health",
-            handler: (req, reply) => reply.code(HttpCode["OK"]).send({ health: "Ok" }),
+            handler: async (req, reply) => {
+                return reply.code(HttpCode["OK"]).send(await isHealthy(fastify));
+                // reply.code(HttpCode["OK"]).send({ health: "Ok" });
+            },
         })
         .route({
             method: "GET",
