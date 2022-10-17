@@ -29,8 +29,12 @@ export async function home(fastify: FastifyInstance) {
         .route({
             method: "GET",
             url: "/",
-            handler: (req, reply) =>
-                new ExtendedError(`Route ${String(req.raw.method).toUpperCase()}:${req.raw.url} not found`, HttpCode["Not Found"]),
+            handler: async (req, reply) => {
+                throw new ExtendedError(
+                    `Route ${String(req.raw.method).toUpperCase()}:${req.raw.url} not found`,
+                    HttpCode["Not Found"]
+                );
+            },
         });
 }
 
