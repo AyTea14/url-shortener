@@ -29,12 +29,8 @@ export async function home(fastify: FastifyInstance) {
         .route({
             method: "GET",
             url: "/",
-            handler: async (req, reply) => {
-                throw new ExtendedError(
-                    `Route ${String(req.raw.method).toUpperCase()}:${req.raw.url} not found`,
-                    HttpCode["Not Found"]
-                );
-            },
+            handler: async (req, reply) =>
+                new ExtendedError(`Route ${String(req.raw.method).toUpperCase()}:${req.raw.url} not found`, HttpCode["Not Found"]),
         });
 }
 
@@ -46,22 +42,20 @@ export async function urls(fastify: FastifyInstance) {
             preHandler: auth,
             config: { rateLimit: { max: 10, timeWindow: "5s" } },
             handler: async function (req, reply) {
-                const baseUrl = `${process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`}/s`;
-                const url = req.body?.url;
-                if (!url) throw new ExtendedError("Please enter a url", HttpCode["Bad Request"]);
-                isBlockedHostname(url, req.hostname);
+                const baseUrl = `${process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`}`;
+                const inputUrl = req.body?.url;
+                if (!inputUrl) throw new ExtendedError("Please enter a url", HttpCode["Bad Request"]);
+                isBlockedHostname(inputUrl, req.hostname);
 
-                const id = await shorten(fastify, url);
+                const id = await shorten(fastify, inputUrl);
+                const url = new URL(id, baseUrl);
 
-                reply
-                    .type("application/json")
-                    .code(HttpCode["Created"])
-                    .send({ short: id, url: `${baseUrl}/${id}` });
+                reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
             },
         })
         .route<{ Params: { short: string } }>({
             method: "GET",
-            url: "/s/:short",
+            url: "/:short",
             handler: async function (req, reply) {
                 const now = new Date();
                 const code = Buffer.from(req.params.short, "ascii").toString("base64url");
@@ -81,7 +75,7 @@ export async function urls(fastify: FastifyInstance) {
         })
         .route<{ Params: { short: string } }>({
             method: "GET",
-            url: "/s/:short/stats",
+            url: "/:short-",
             handler: async function (req, reply) {
                 const code = Buffer.from(req.params.short, "ascii").toString("base64url");
                 const data = await fastify.db.shortened.findUnique({

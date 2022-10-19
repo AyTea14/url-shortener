@@ -84,7 +84,7 @@ export class Logger {
     }
 
     private get time() {
-        return dayjs().tz("asia/kuala_lumpur").format("YYYY/MM/DD - HH:mm:ss");
+        return dayjs().tz("asia/kuala_lumpur").format("YYYY-MM-DD HH:mm:ss");
     }
 }
 

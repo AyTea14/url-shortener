@@ -20,7 +20,7 @@ export async function shorten(fastify: FastifyInstance, url: string) {
             );
         }
 
-        id = randomString(randomInt(8, 10));
+        id = randomString(randomInt(6, 8));
         const encodedId = Buffer.from(id, "ascii").toString("base64url");
 
         try {

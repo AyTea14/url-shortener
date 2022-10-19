@@ -8,7 +8,7 @@
         "resolveJsonModule": true,
         "paths": {
             "#lib/*": ["lib/*"],
-            "#root/*": ["root/*"]
+            "#root/*": ["*"]
         }
     },
     "include": ["."]
