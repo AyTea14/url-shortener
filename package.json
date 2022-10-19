@@ -5,11 +5,10 @@
   "main": "dist/index.js",
   "type": "commonjs",
   "scripts": {
-    "build": "tsup && npm run build:config && npx prisma generate",
-    "build:yarn": "tsup && yarn build:config && prisma generate",
+    "build": "tsup && npx prisma generate",
+    "build:yarn": "tsup && prisma generate",
     "start": "node --experimental-json-modules ./dist/index.js",
-    "build:config": "node ./scripts/blocked.js",
-    "dev": "tsup --watch --onSuccess \"yarn build:config && yarn start\""
+    "dev": "tsup --watch --onSuccess \"yarn start\""
   },
   "keywords": [],
   "author": "",
@@ -21,6 +20,7 @@
     "#lib/exceptions": "./dist/lib/exceptions/index.js",
     "#lib/home": "./dist/lib/home.js",
     "#lib": "./dist/lib/*.js",
+    "#config": "./dist/config/index.js",
     "#root/*": "./dist/*.js"
   },
   "dependencies": {

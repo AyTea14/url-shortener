@@ -61,7 +61,7 @@ export function removeTrailingSlash(req: FastifyRequest, reply: FastifyReply, do
     } else done();
 }
 
-export const coloredMethod = (method: string): string => {
+const coloredMethod = (method: string): string => {
     let methods = ` ${method.padEnd(7)} `;
 
     if (method === "GET") return bgBlue(whiteBright(`${methods}`));
@@ -73,7 +73,7 @@ export const coloredMethod = (method: string): string => {
     else if (method === "OPTIONS") return bgWhite(black(`${methods}`));
     else return methods;
 };
-export const coloredStatusCode = (statusCode: number | string): string => {
+const coloredStatusCode = (statusCode: number | string): string => {
     let statusCodes = ` ${String(statusCode).padStart(3)} `;
     if (statusCode >= 200 && statusCode < 300) return bgGreen(whiteBright(`${statusCodes}`));
     else if (statusCode >= 300 && statusCode < 400) return bgWhite(black(`${statusCodes}`));

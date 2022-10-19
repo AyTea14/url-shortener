@@ -1,4 +1,3 @@
-import { HttpCode } from "#lib/types";
 import { STATUS_CODES } from "http";
 
 export class ExtendedError extends Error {
