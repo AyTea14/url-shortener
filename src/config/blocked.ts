@@ -613,7 +613,6 @@ export const blockedHostnames = [
     "yogh.me",
     "youfap.me",
     "yourls.org",
-    "youtu.be",
     "ysear.ch",
     "yu2.it",
     "yweb.com",
