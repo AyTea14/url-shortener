@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@fastify/rate-limit": "^7.5.0",
-    "@prisma/client": "^4.4.0",
+    "@prisma/client": "^4.5.0",
     "@sapphire/ts-config": "^3.3.4",
     "colorette": "^2.0.19",
     "dayjs": "^1.11.5",
