@@ -1,6 +1,7 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
 import { auth, isBlockedHostname, isHealthy, shorten } from "#lib/utils";
+import { isExisted } from "#lib/utils";
 import { FastifyInstance } from "fastify";
 
 export async function home(fastify: FastifyInstance) {
@@ -19,11 +20,13 @@ export async function home(fastify: FastifyInstance) {
             method: "GET",
             url: "/stats",
             handler: async function (req, reply) {
-                const data = await fastify.db.shortened.findMany({ select: { visits: true, code: true } });
+                let [urls, visitsData] = await fastify.db.$transaction([
+                    fastify.db.shortened.count({ where: { blocked: false } }),
+                    fastify.db.shortened.findMany({ where: { blocked: false }, select: { visits: true } }),
+                ]);
+                let visits = visitsData.reduce((prev, curr) => prev + curr.visits.length, 0);
 
-                let visitsStats = data.reduce((prev, curr) => prev + curr.visits.length, 0);
-
-                reply.type("application/json").send({ urls: data.length, visits: visitsStats });
+                reply.type("application/json").send({ urls, visits });
             },
         })
         .route({
@@ -46,6 +49,13 @@ export async function urls(fastify: FastifyInstance) {
                 const inputUrl = req.body?.url;
                 if (!inputUrl) throw new ExtendedError("Please enter a url", HttpCode["Bad Request"]);
                 isBlockedHostname(inputUrl, req.hostname);
+
+                const existedId = await isExisted(fastify, inputUrl);
+                if (existedId)
+                    return reply
+                        .type("application/json")
+                        .code(HttpCode["OK"])
+                        .send({ short: existedId, url: new URL(existedId, baseUrl).toString() });
 
                 const id = await shorten(fastify, inputUrl);
                 const url = new URL(id, baseUrl);
