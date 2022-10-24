@@ -2,7 +2,7 @@ import "dotenv/config";
 import fastify from "fastify";
 import ratelimit from "@fastify/rate-limit";
 import auth from "@fastify/auth";
-import { create, token, urls, users } from "#lib/routes";
+import { urls, users } from "#lib/routes";
 import { PrismaClient } from "@prisma/client";
 import { Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
 import { home } from "#lib/routes";
@@ -19,8 +19,6 @@ server.db = new PrismaClient();
 
 await server.register(ratelimit);
 await server.register(auth);
-await server.register(token, { prefix: "/users" });
-await server.register(create, { prefix: "/users" });
 await server.register(users, { prefix: "/users" });
 await server.register(home);
 await server.register(urls);

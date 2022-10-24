@@ -21,6 +21,8 @@ declare global {
             SHORT_LENGTH?: string;
             PORT?: string;
             API_KEY?: string;
+            ADMIN_USERNAME?: string;
+            ADMIN_PASS?: string;
         }
     }
 }

@@ -8,7 +8,7 @@ import { config } from "#config";
 
 const MAX_SHORT_ID_GENERATION_ATTEMPTS = 10;
 
-export async function shorten(fastify: FastifyInstance, url: string) {
+export async function shorten(fastify: FastifyInstance, userId: string, url: string) {
     let attempts = 0;
     let created: shortened | undefined;
     let id: string;
@@ -25,7 +25,7 @@ export async function shorten(fastify: FastifyInstance, url: string) {
         const encodedId = Buffer.from(id, "ascii").toString("base64url");
 
         try {
-            created = await fastify.db.shortened.create({ data: { code: encodedId, url } });
+            created = await fastify.db.shortened.create({ data: { code: encodedId, url, userId } });
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
             } else {

@@ -1,6 +1,6 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-import { auth, isBlockedHostname, isHealthy, shorten } from "#lib/utils";
+import { auth, isBlockedHostname, isHealthy, shorten, tokenAuth } from "#lib/utils";
 import { isExisted } from "#lib/utils";
 import { FastifyInstance } from "fastify";
 
@@ -26,7 +26,7 @@ export async function home(fastify: FastifyInstance) {
                 ]);
                 let visits = visitsData.reduce((prev, curr) => prev + curr.visits.length, 0);
 
-                reply.type("application/json").send({ urls, visits });
+                return reply.type("application/json").send({ urls, visits });
             },
         })
         .route({
@@ -42,8 +42,8 @@ export async function urls(fastify: FastifyInstance) {
         .route<{ Body: { url: string } }>({
             method: "POST",
             url: "/shorten",
-            preHandler: auth,
             config: { rateLimit: { max: 10, timeWindow: "5s" } },
+            preHandler: fastify.auth([tokenAuth]),
             handler: async function (req, reply) {
                 const baseUrl = `${process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`}`;
                 const inputUrl = req.body?.url;
@@ -57,10 +57,10 @@ export async function urls(fastify: FastifyInstance) {
                         .code(HttpCode["OK"])
                         .send({ short: existedId, url: new URL(existedId, baseUrl).toString() });
 
-                const id = await shorten(fastify, inputUrl);
+                const id = await shorten(fastify, req.user.id, inputUrl);
                 const url = new URL(id, baseUrl);
 
-                reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
+                return reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
             },
         })
         .route<{ Params: { short: string } }>({
@@ -80,7 +80,7 @@ export async function urls(fastify: FastifyInstance) {
                     data: { visits: { push: now } },
                 });
 
-                reply.redirect(HttpCode["Permanent Redirect"], data.url);
+                return reply.redirect(HttpCode["Permanent Redirect"], data.url);
             },
         })
         .route<{ Params: { short: string } }>({
@@ -94,7 +94,7 @@ export async function urls(fastify: FastifyInstance) {
                 });
                 if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
-                reply.type("application/json").send({ url: data.url, visits: data.visits });
+                return reply.type("application/json").send({ url: data.url, visits: data.visits });
             },
         });
 }

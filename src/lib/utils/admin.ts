@@ -14,14 +14,13 @@ export function passAuth(req: FastifyRequest, reply: FastifyReply, done: HookHan
         req.user = { name: user.name, id: user.id };
         req.admin = user.admin;
         if (hash === user.password) return done();
-        logger.warn(`[${req.user}] password`);
+        logger.warn(`[${req.user.name}] password`);
         return done(new ExtendedError("Incorrect password provided", HttpCode["Unauthorized"]));
     });
 }
 
 export function adminAuth(req: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) {
     if (req.admin) return done();
-    logger.warn(`[${req.user.name}] admin`);
     return done(new ExtendedError("Admin privileges required", HttpCode["Unauthorized"]));
 }
 
