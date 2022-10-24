@@ -17,3 +17,12 @@ model shortened {
   blocked   Boolean    @default(false)
   visits    DateTime[]
 }
+
+model users {
+  id       String  @id @map("_id")
+  name     String
+  password String
+  salt     String
+  token    String?
+  admin    Boolean @default(false)
+}

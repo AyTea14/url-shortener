@@ -1,8 +1,18 @@
 import { bgBlue, bgCyan, bgGreen, bgMagenta, bgRed, bgWhite, bgYellow, black, whiteBright } from "colorette";
-import { randomInt } from "crypto";
+import { BinaryLike, pbkdf2Sync, randomInt } from "crypto";
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { logger } from "../../index.js";
 import prettyMs from "pretty-ms";
+
+export function encode(buffer: Buffer | string) {
+    return Buffer.from(buffer).toString("base64url");
+}
+export function decode(input: string) {
+    return Buffer.from(input, "base64url").toString("utf-8");
+}
+export function hashSecret(password: BinaryLike, salt: BinaryLike) {
+    return encode(pbkdf2Sync(password, salt, 16384, 128, "sha512"));
+}
 
 export function randomString(length: number = 8) {
     const randomChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

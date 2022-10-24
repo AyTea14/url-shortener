@@ -4,6 +4,7 @@ import { shortened, Prisma } from "@prisma/client";
 import { FastifyInstance } from "fastify";
 import { randomString } from "#lib/utils";
 import { randomInt } from "crypto";
+import { config } from "#config";
 
 const MAX_SHORT_ID_GENERATION_ATTEMPTS = 10;
 
@@ -20,7 +21,7 @@ export async function shorten(fastify: FastifyInstance, url: string) {
             );
         }
 
-        id = randomString(8);
+        id = randomString(config.shortLength);
         const encodedId = Buffer.from(id, "ascii").toString("base64url");
 
         try {

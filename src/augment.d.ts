@@ -4,6 +4,14 @@ declare module "fastify" {
     interface FastifyInstance {
         db: PrismaClient;
     }
+    interface FastifyRequest {
+        db: PrismaClient;
+        user: {
+            id: string;
+            name: string;
+        };
+        admin?: boolean;
+    }
 }
 
 declare global {

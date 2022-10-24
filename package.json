@@ -19,13 +19,16 @@
     "#lib/types": "./dist/lib/types/index.js",
     "#lib/exceptions": "./dist/lib/exceptions/index.js",
     "#lib/home": "./dist/lib/home.js",
+    "#lib/routes": "./dist/lib/routes/index.js",
     "#lib": "./dist/lib/*.js",
     "#config": "./dist/config/index.js",
     "#root/*": "./dist/*.js"
   },
   "dependencies": {
+    "@fastify/auth": "^4.1.0",
     "@fastify/rate-limit": "^7.5.0",
     "@prisma/client": "^4.5.0",
+    "@sapphire/snowflake": "^3.2.2",
     "@sapphire/ts-config": "^3.3.4",
     "colorette": "^2.0.19",
     "dayjs": "^1.11.5",
