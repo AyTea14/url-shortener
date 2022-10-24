@@ -16,6 +16,7 @@ model shortened {
   createdAt DateTime   @default(now())
   blocked   Boolean    @default(false)
   visits    DateTime[]
+  userId    String
 }
 
 model users {
