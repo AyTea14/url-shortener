@@ -1,6 +1,6 @@
 {
-  "name": "shrtlink",
-  "version": "1.0.0",
+  "name": "klik",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "type": "module",

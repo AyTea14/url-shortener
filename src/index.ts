@@ -18,7 +18,7 @@ const server = fastify({
 server.db = new PrismaClient();
 
 await server.register(ratelimit);
-await server.register(auth);
+await server.register(auth, { defaultRelation: "and" });
 await server.register(users, { prefix: "/users" });
 await server.register(home);
 await server.register(urls);

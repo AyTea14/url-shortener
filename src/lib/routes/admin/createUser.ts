@@ -12,10 +12,10 @@ export async function createUser(fastify: FastifyInstance) {
     fastify.route<{ Params: { name: string }; Body: { pass: string; admin: string } }>({
         url: "/:name",
         method: "POST",
-        preHandler: fastify.auth([tokenAuth, adminAuth]),
+        preHandler: fastify.auth([tokenAuth, adminAuth], { run: "all" }),
         handler: async function (req, reply) {
             const { name } = req.params;
-            const { pass, admin } = req.body
+            const { pass, admin } = req.body;
             if (!pass) throw new ExtendedError("Password missing", HttpCode["Bad Request"]);
             if (!admin) throw new ExtendedError("Specify whether this user is an admin", HttpCode["Bad Request"]);
             const isAdmin = ["true", true, "y", "yes", "1", 1].includes(admin);
