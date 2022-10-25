@@ -12,13 +12,12 @@ export async function me(fastify: FastifyInstance) {
             preHandler: fastify.auth([passAuth]),
             config: { rateLimit: { max: 1, timeWindow: "10s" } },
             handler: async function (req, reply) {
-                const { id: _id } = req.user!;
+                const { id } = req.user!;
                 const salt = encode(random(8));
                 const secret = encode(random(24));
-                const id = String(BigInt(_id) + BigInt(randomInt(5e8, 1e9)));
                 const token = `${encode(id)}.${salt}.${secret}`;
                 const hash = hashSecret(secret, salt);
-                await fastify.db.users.update({ where: { id: _id }, data: { token: hash } });
+                await fastify.db.users.update({ where: { id }, data: { token: hash } });
                 reply.type("application/json").send({ success: true, token });
             },
         })
