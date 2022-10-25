@@ -22,23 +22,25 @@ const server = fastify({
 });
 server.db = new PrismaClient();
 
-await server.register(ratelimit);
-await server.register(auth);
-await server.register(users, { prefix: "/users" });
-await server.register(home);
-await server.register(urls);
-await server.db.$connect().then(() => logger.info("successfully connected to database"));
+await server.db.$connect().then(async () => {
+    await server.register(ratelimit);
+    await server.register(auth);
+    await server.register(users, { prefix: "/users" });
+    await server.register(home);
+    await server.register(urls);
+    logger.info("successfully connected to database");
 
-server
-    .addHook("onRequest", async (req, reply) => {
-        req.user = null;
-        req.admin = false;
-        req.db = server.db;
-    })
-    .addHook("preHandler", removeTrailingSlash)
-    .addHook("onResponse", async (_, reply) => reply.getResponseTime())
-    .addHook("onResponse", reqLogger);
+    server
+        .addHook("onRequest", async (req, reply) => {
+            req.user = null;
+            req.admin = false;
+            req.db = server.db;
+        })
+        .addHook("preHandler", removeTrailingSlash)
+        .addHook("onResponse", async (_, reply) => reply.getResponseTime())
+        .addHook("onResponse", reqLogger);
 
-server.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
-    logger.info(`application listening at ${address}`);
+    server.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
+        logger.info(`application listening at ${address}`);
+    });
 });

@@ -23,7 +23,7 @@ export async function passAuth(req: FastifyRequest, reply: FastifyReply) {
 //     const hash = hashSecret(pass, user.salt);
 //     req.user = { name: user.name, id: user.id };
 //     req.admin = user.admin;
-//     if (hash !== user.password) 
+//     if (hash !== user.password)
 //         throw new ExtendedError("Incorrect password provided", HttpCode["Unauthorized"]);
 // }
 
