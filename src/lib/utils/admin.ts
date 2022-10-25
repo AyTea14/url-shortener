@@ -1,6 +1,5 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-import { logger } from "#root/index";
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { decode, hashSecret } from "./functions.js";
 
@@ -13,10 +12,7 @@ export async function passAuth(req: FastifyRequest, reply: FastifyReply) {
     const hash = hashSecret(pass, user.salt);
     req.user = { name: user.name, id: user.id };
     req.admin = user.admin;
-    if (hash !== user.password) {
-        logger.warn(`[${req.user.name}] password`);
-        throw new ExtendedError("Incorrect password provided", HttpCode["Unauthorized"]);
-    }
+    if (hash !== user.password) throw new ExtendedError("Incorrect password provided", HttpCode["Unauthorized"]);
 }
 // export async function passAuthWithId(req: FastifyRequest, reply: FastifyReply) {
 //     const auth = req.headers["authorization"];
@@ -27,15 +23,12 @@ export async function passAuth(req: FastifyRequest, reply: FastifyReply) {
 //     const hash = hashSecret(pass, user.salt);
 //     req.user = { name: user.name, id: user.id };
 //     req.admin = user.admin;
-//     if (hash !== user.password) {
-//         logger.warn(`[${req.user.name}] password`);
+//     if (hash !== user.password) 
 //         throw new ExtendedError("Incorrect password provided", HttpCode["Unauthorized"]);
-//     }
 // }
 
-export function adminAuth(req: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) {
-    if (req.admin) return done();
-    return done(new ExtendedError("Admin privileges required", HttpCode["Unauthorized"]));
+export async function adminAuth(req: FastifyRequest, reply: FastifyReply) {
+    if (!req.admin) throw new ExtendedError("Admin privileges required", HttpCode["Unauthorized"]);
 }
 
 export async function tokenAuth(req: FastifyRequest, reply: FastifyReply) {

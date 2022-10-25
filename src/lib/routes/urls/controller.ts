@@ -1,8 +1,12 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-import { auth, isBlockedHostname, isHealthy, shorten, tokenAuth } from "#lib/utils";
+import { isBlockedHostname, isHealthy, shorten, tokenAuth } from "#lib/utils";
 import { isExisted } from "#lib/utils";
 import { FastifyInstance } from "fastify";
+import { readFileSync } from "fs";
+import { resolve } from "path";
+
+const version = JSON.parse(readFileSync(resolve(process.cwd(), "package.json")).toString()).version;
 
 export async function home(fastify: FastifyInstance) {
     fastify
@@ -26,7 +30,7 @@ export async function home(fastify: FastifyInstance) {
                 ]);
                 let visits = visitsData.reduce((prev, curr) => prev + curr.visits.length, 0);
 
-                return reply.type("application/json").send({ urls, visits });
+                return reply.type("application/json").send({ urls, visits, version });
             },
         })
         .route({

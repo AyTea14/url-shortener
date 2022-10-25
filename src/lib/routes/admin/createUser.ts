@@ -26,7 +26,6 @@ export async function createUser(fastify: FastifyInstance) {
                 await fastify.db.users.create({
                     data: { id: snowflake.generate().toString(), admin: isAdmin, salt, password, name: name.toLowerCase() },
                 });
-                logger.debug(`[${name.toLowerCase()}]`);
                 reply.type("application/json").send({ success: true });
             });
         },

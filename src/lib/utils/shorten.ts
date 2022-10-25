@@ -19,7 +19,6 @@ export async function shorten(fastify: FastifyInstance, userId: string, url: str
             throw new Error(error as string);
         }
     }
-    console.log(id);
 
     return id;
 }

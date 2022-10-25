@@ -13,11 +13,11 @@ export async function createAdmin(fastify: FastifyInstance) {
         url: "/createAdmin",
         method: "POST",
         preHandler: fastify.auth([
-            function (req, reply, done) {
+            async function (req, reply) {
                 const { name, pass } = req.query as { name: string; pass: string };
-                if (!name || !pass) return done(new ExtendedError("Restricted url path", HttpCode["Unauthorized"]));
-                if (name === config.admin.username && pass === config.admin.pass) return done();
-                return done(new ExtendedError("Restricted url path", HttpCode["Unauthorized"]));
+                if (!name || !pass) throw new ExtendedError("Restricted url path", HttpCode["Unauthorized"]);
+                if (name !== config.admin.username && pass !== config.admin.pass)
+                    throw new ExtendedError("Restricted url path", HttpCode["Unauthorized"]);
             },
         ]),
         handler: async function (req, reply) {

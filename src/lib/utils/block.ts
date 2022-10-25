@@ -5,7 +5,7 @@ import { blockedHostnames } from "#config";
 export function isBlockedHostname(url: string, baseUrl?: string) {
     if (baseUrl) blockedHostnames.push(baseUrl);
     try {
-        url = new URL(url).host;
+        url = new URL(url).hostname;
     } catch (error) {}
 
     let blocked = new Set(blockedHostnames);
