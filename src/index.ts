@@ -23,12 +23,12 @@ const server = fastify({
 server.db = new PrismaClient();
 
 await server.db.$connect().then(async () => {
+    logger.info("successfully connected to database");
     await server.register(ratelimit);
     await server.register(auth);
     await server.register(users, { prefix: "/users" });
     await server.register(home);
     await server.register(urls);
-    logger.info("successfully connected to database");
 
     server
         .addHook("onRequest", async (req, reply) => {
