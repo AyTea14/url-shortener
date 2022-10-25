@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsup && npx prisma@4.5.0 generate",
     "build:yarn": "tsup && prisma generate",
-    "start": "node ./dist/index.js",
+    "start": "node --enable-source-maps ./dist/index.js",
     "dev": "tsup --watch --onSuccess \"yarn start\""
   },
   "keywords": [],
