@@ -9,8 +9,8 @@ declare module "fastify" {
         user: {
             id: string;
             name: string;
-        };
-        admin?: boolean;
+        } | null;
+        admin: boolean;
     }
 }
 
@@ -18,6 +18,7 @@ declare global {
     namespace NodeJS {
         interface ProcessEnv {
             DATABASE_URL?: string;
+            BASE_URL?: string;
             SHORT_LENGTH?: string;
             PORT?: string;
             API_KEY?: string;

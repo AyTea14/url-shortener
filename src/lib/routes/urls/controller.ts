@@ -57,10 +57,10 @@ export async function urls(fastify: FastifyInstance) {
                         .code(HttpCode["OK"])
                         .send({ short: existedId, url: new URL(existedId, baseUrl).toString() });
 
-                const id = await shorten(fastify, req.user.id, inputUrl);
+                const id = await shorten(fastify, req.user!.id, inputUrl);
                 const url = new URL(id, baseUrl);
 
-                return reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
+                reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
             },
         })
         .route<{ Params: { short: string } }>({
