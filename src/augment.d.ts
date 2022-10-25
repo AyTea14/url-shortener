@@ -6,10 +6,7 @@ declare module "fastify" {
     }
     interface FastifyRequest {
         db: PrismaClient;
-        user: {
-            id: string;
-            name: string;
-        } | null;
+        user: { id: string; name: string } | null;
         admin: boolean;
     }
 }
