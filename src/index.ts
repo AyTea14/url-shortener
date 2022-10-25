@@ -1,3 +1,4 @@
+console.log("test");
 import "dotenv/config";
 import fastify from "fastify";
 import ratelimit from "@fastify/rate-limit";
