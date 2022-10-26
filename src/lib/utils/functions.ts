@@ -40,7 +40,7 @@ export async function isHealthy(fastify: FastifyInstance) {
     let prismaError: unknown;
 
     try {
-        await fastify.db.shortened.findFirst();
+        await fastify.db.shortened.findMany();
         isHealthy = true;
     } catch (error) {
         isHealthy = false;
@@ -48,7 +48,7 @@ export async function isHealthy(fastify: FastifyInstance) {
     }
 
     return {
-        status: isHealthy ? "ok" : "",
+        status: isHealthy ? "ok" : "down",
         info: {
             database: {
                 status: !prismaError ? "up" : "down",
