@@ -4,20 +4,20 @@ import ratelimit from "@fastify/rate-limit";
 import auth from "@fastify/auth";
 import { urls, users } from "#lib/routes";
 import { PrismaClient } from "@prisma/client";
-import { Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
+import { createSnowflake, Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
 import { home } from "#lib/routes";
 import { config } from "#config";
-import { Snowflake } from "@sapphire/snowflake";
+import { HttpCode } from "#lib/types";
+import prettyMs from "pretty-ms";
 
 export const logger = new Logger();
-const snowflake = new Snowflake(1118707200000);
 const PORT = config.port || 3000;
 const server = fastify({
     ignoreTrailingSlash: false,
     ignoreDuplicateSlashes: true,
     trustProxy: true,
     genReqId(req) {
-        return snowflake.generate().toString();
+        return createSnowflake();
     },
 });
 server.db = new PrismaClient();

@@ -3,6 +3,13 @@ import { BinaryLike, pbkdf2Sync, randomInt } from "crypto";
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { logger } from "../../index.js";
 import prettyMs from "pretty-ms";
+import { Snowflake } from "@sapphire/snowflake";
+
+const snowflake = new Snowflake(1118707200000);
+
+export function createSnowflake() {
+    return `${snowflake.generate()}`;
+}
 
 export function encode(buffer: Buffer | string) {
     return Buffer.from(buffer).toString("base64url");

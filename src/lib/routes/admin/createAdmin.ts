@@ -1,12 +1,9 @@
 import { randomBytes } from "crypto";
 import { FastifyInstance } from "fastify";
-import { Snowflake } from "@sapphire/snowflake";
-import { encode, hashSecret } from "#lib/utils";
+import { createSnowflake, encode, hashSecret } from "#lib/utils";
 import { config } from "#config";
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-
-const snowflake = new Snowflake(1118707200000);
 
 export async function createAdmin(fastify: FastifyInstance) {
     fastify.route<{ Body: { name: string; password: string } }>({
@@ -27,8 +24,8 @@ export async function createAdmin(fastify: FastifyInstance) {
                 const salt = encode(randomBytes(16));
                 const password = hashSecret(pass, salt);
                 const username = name.toLowerCase();
-                const id = snowflake.generate();
-                await req.db.users.create({ data: { name: username, password, salt, admin: true, id: id.toString() } });
+                const id = createSnowflake();
+                await req.db.users.create({ data: { name: username, password, salt, admin: true, id: id } });
             }
         },
     });
