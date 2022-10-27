@@ -61,7 +61,7 @@ export async function isHealthy(fastify: FastifyInstance) {
                 status: !prismaError ? "up" : "down",
             },
         },
-        error: prismaError ? (prismaError instanceof Error ? prismaError.message : prismaError) : null,
+        error: prismaError ? (prismaError instanceof Error ? prismaError.message : prismaError) : undefined,
     };
 }
 
