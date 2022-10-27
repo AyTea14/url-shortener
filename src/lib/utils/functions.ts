@@ -47,7 +47,7 @@ export async function isHealthy(fastify: FastifyInstance) {
     let prismaError: unknown;
 
     try {
-        await fastify.db.shortened.findMany();
+        await fastify.db.shortened.findMany({ select: { code: true } });
         isHealthy = true;
     } catch (error) {
         isHealthy = false;
