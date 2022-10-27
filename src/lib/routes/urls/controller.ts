@@ -1,7 +1,6 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-import { isBlockedHostname, isHealthy, shorten, tokenAuth } from "#lib/utils";
-import { isExisted } from "#lib/utils";
+import { isBlockedHostname, isHealthy, shorten, tokenAuth, isExisted } from "#lib/utils";
 import { FastifyInstance } from "fastify";
 import { readFileSync } from "fs";
 import { resolve } from "path";
