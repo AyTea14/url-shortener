@@ -13,7 +13,14 @@ export async function home(fastify: FastifyInstance) {
         .route({
             method: "GET",
             url: "/health",
-            handler: async (req, reply) => reply.code(HttpCode["OK"]).send(await isHealthy(fastify)),
+            handler: async (req, reply) => {
+                let code: number
+                const health = await isHealthy(fastify)
+                if (health.status === 'ok') code = HttpCode['OK']
+                else code = HttpCode['Internal Server Error']
+
+                reply.code(code).send(health)
+            },
         })
         .route({
             method: "GET",
