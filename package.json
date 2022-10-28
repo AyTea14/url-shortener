@@ -6,9 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsup && npx prisma@4.5.0 generate",
-    "build:yarn": "tsup && prisma generate",
     "start": "node --enable-source-maps ./dist/index.js",
-    "dev": "tsup --watch --onSuccess \"yarn start\""
+    "dev": "tsup --watch --onSuccess \"npm run start\""
   },
   "keywords": [],
   "author": "",
