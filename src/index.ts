@@ -7,8 +7,6 @@ import { PrismaClient } from "@prisma/client";
 import { createSnowflake, Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
 import { home } from "#lib/routes";
 import { config } from "#config";
-import { HttpCode } from "#lib/types";
-import prettyMs from "pretty-ms";
 
 export const logger = new Logger();
 const PORT = config.port || 3000;

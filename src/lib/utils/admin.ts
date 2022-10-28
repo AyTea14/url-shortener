@@ -46,13 +46,3 @@ export async function tokenAuth(req: FastifyRequest, reply: FastifyReply) {
     req.user = { id: user.id, name: user.name };
     req.admin = user.admin;
 }
-
-// function hashSecret(password: BinaryLike, salt: BinaryLike) {
-//     return encode(pbkdf2Sync(password, salt, 16384, 128, "sha512"));
-// }
-// function encode(input: Buffer | string) {
-//     return Buffer.from(input).toString("base64url");
-// }
-// function decode(input: string) {
-//     return Buffer.from(input, "base64url").toString("utf-8");
-// }
