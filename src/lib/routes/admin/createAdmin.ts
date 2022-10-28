@@ -1,4 +1,4 @@
-import { randomBytes } from "crypto";
+import { randomBytes as random } from "crypto";
 import { FastifyInstance } from "fastify";
 import { createSnowflake, encode, hashSecret } from "#lib/utils";
 import { config } from "#config";
@@ -21,7 +21,7 @@ export async function createAdmin(fastify: FastifyInstance) {
             const { name, password: pass } = req.body;
             const admin = await req.db.users.findFirst({ where: { admin: true } });
             if (!admin) {
-                const salt = encode(randomBytes(16));
+                const salt = encode(random(16));
                 const password = hashSecret(pass, salt);
                 const username = name.toLowerCase();
                 const id = createSnowflake();

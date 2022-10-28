@@ -22,7 +22,7 @@ server.db = new PrismaClient();
 
 await server.db.$connect().then(async () => {
     logger.info("successfully connected to database");
-    await server.register(ratelimit);
+    await server.register(ratelimit, { global: true, max: 20, ban: 10, timeWindow: "25s" });
     await server.register(auth);
     await server.register(users, { prefix: "/users" });
     await server.register(home);
