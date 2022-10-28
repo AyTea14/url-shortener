@@ -4,7 +4,7 @@ import ratelimit from "@fastify/rate-limit";
 import auth from "@fastify/auth";
 import { urls, users } from "#lib/routes";
 import { PrismaClient } from "@prisma/client";
-import { createSnowflake, Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
+import { generateSnowflake, Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
 import { home } from "#lib/routes";
 import { config } from "#config";
 
@@ -14,9 +14,7 @@ const server = fastify({
     ignoreTrailingSlash: false,
     ignoreDuplicateSlashes: true,
     trustProxy: true,
-    genReqId(req) {
-        return createSnowflake();
-    },
+    genReqId: (req) => generateSnowflake(),
 });
 server.db = new PrismaClient();
 

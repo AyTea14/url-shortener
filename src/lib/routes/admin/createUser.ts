@@ -1,7 +1,7 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
 import { randomBytes as random } from "crypto";
-import { adminAuth, createSnowflake, encode, hashSecret, tokenAuth } from "#lib/utils";
+import { adminAuth, generateSnowflake, encode, hashSecret, tokenAuth } from "#lib/utils";
 import { FastifyInstance } from "fastify";
 
 export async function createUser(fastify: FastifyInstance) {
@@ -20,7 +20,7 @@ export async function createUser(fastify: FastifyInstance) {
                 const salt = encode(random(16));
                 const password = hashSecret(pass, salt);
                 await fastify.db.users.create({
-                    data: { id: createSnowflake(), admin: isAdmin, salt, password, name: name.toLowerCase() },
+                    data: { id: generateSnowflake(), admin: isAdmin, salt, password, name: name.toLowerCase() },
                 });
                 reply.type("application/json").send({ success: true });
             });

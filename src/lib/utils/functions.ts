@@ -7,8 +7,8 @@ import { Snowflake } from "@sapphire/snowflake";
 
 const snowflake = new Snowflake(1118707200000);
 
-export function createSnowflake() {
-    return `${snowflake.generate()}`;
+export function generateSnowflake() {
+    return "" + snowflake.generate();
 }
 
 export function encode(buffer: Buffer | string) {
@@ -22,10 +22,10 @@ export function hashSecret(password: BinaryLike, salt: BinaryLike) {
 }
 
 export function randomString(length: number = 8) {
-    const randomChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let result = "";
     for (let i = 0; i < length; i++) {
-        result += randomChars.charAt(randomInt(randomChars.length));
+        result += chars.charAt(randomInt(chars.length));
     }
     return result;
 }
@@ -47,7 +47,7 @@ export async function isHealthy(fastify: FastifyInstance) {
     let prismaError: unknown;
 
     try {
-        await fastify.db.shortened.findMany({ select: { code: true } });
+        await fastify.db.shortened.findMany();
         isHealthy = true;
     } catch (error) {
         isHealthy = false;
@@ -98,10 +98,11 @@ const coloredStatusCode = (statusCode: number | string): string => {
 };
 
 export const reqLogger = async (req: FastifyRequest, reply: FastifyReply) => {
+    let { id } = req;
     let latency = prettyMs(reply.getResponseTime(), { secondsDecimalDigits: 7, millisecondsDecimalDigits: 4 }).padStart(13);
     let clientIp = String(req.ip).padStart(15);
     let statusCode = coloredStatusCode(reply.statusCode);
     let method = coloredMethod(req.method);
-    logger.info(`${statusCode} | ${latency} | ${clientIp} | ${method} "${req.url}"`);
+    logger.info(`${id} | ${statusCode} | ${latency} | ${clientIp} | ${method} "${req.url}"`);
     return;
 };
