@@ -5,7 +5,7 @@ import { FastifyInstance } from "fastify";
 import { readFileSync } from "fs";
 import { resolve } from "path";
 
-const version = JSON.parse(readFileSync(resolve(process.cwd(), "package.json")).toString()).version;
+const version = Reflect.get(JSON.parse(readFileSync(resolve(process.cwd(), "package.json")).toString()), "version");
 
 export async function home(fastify: FastifyInstance) {
     fastify
