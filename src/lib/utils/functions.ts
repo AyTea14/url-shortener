@@ -66,7 +66,7 @@ export async function isHealthy(fastify: FastifyInstance) {
                 ? prismaError.message
                 : prismaError
             : null,
-    };
+    } as { status: "ok" | "down"; info: { database: { status: "up" | "down" } }; error: unknown | null };
 }
 
 export function removeTrailingSlash(req: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) {
