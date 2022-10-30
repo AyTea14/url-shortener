@@ -1,6 +1,6 @@
 import { Prisma, shortened } from "@prisma/client";
 import { FastifyInstance } from "fastify";
-import { randomString } from "#lib/utils";
+import { randomString, encode } from "#lib/utils";
 import { config } from "#config";
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
@@ -20,7 +20,7 @@ export async function shorten(fastify: FastifyInstance, userId: string, url: str
             );
 
         id = randomString(config.shortLength);
-        const encodedId = Buffer.from(id, "ascii").toString("base64url");
+        const encodedId = encode(id);
 
         try {
             created = await fastify.db.shortened.create({ data: { code: encodedId, url, userId } });

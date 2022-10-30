@@ -1,6 +1,6 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-import { isBlockedHostname, isHealthy, shorten, tokenAuth, isExisted } from "#lib/utils";
+import { isBlockedHostname, isHealthy, shorten, tokenAuth, isExisted, encode } from "#lib/utils";
 import { FastifyInstance } from "fastify";
 import { readFileSync } from "fs";
 import { resolve } from "path";
@@ -78,10 +78,10 @@ export async function urls(fastify: FastifyInstance) {
             url: "/:short",
             handler: async function (req, reply) {
                 const now = new Date();
-                const code = Buffer.from(req.params.short, "ascii").toString("base64url");
+                const code = encode(req.params.short);
                 const data = await fastify.db.shortened.findUnique({
                     where: { code },
-                    select: { url: true, visits: true },
+                    select: { url: true },
                 });
                 if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
@@ -97,14 +97,14 @@ export async function urls(fastify: FastifyInstance) {
             method: "GET",
             url: "/:short-",
             handler: async function (req, reply) {
-                const code = Buffer.from(req.params.short, "ascii").toString("base64url");
+                const code = encode(req.params.short);
                 const data = await fastify.db.shortened.findUnique({
                     where: { code },
                     select: { url: true, visits: true },
                 });
                 if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
-                return reply.type("application/json").send({ url: data.url, visits: data.visits });
+                return reply.type("application/json").send({ url: data.url, visits: data.visits.map((date) => date.getTime()) });
             },
         });
 }

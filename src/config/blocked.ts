@@ -627,6 +627,7 @@ export const blockedHostnames = [
     "zpag.es",
     "zsms.net",
     "zti.me",
+    "zws.im",
     "zxq.net",
     "zz.gd",
 ];
