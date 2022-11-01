@@ -2,8 +2,8 @@ import { bgBlue, bgCyan, bgGreen, bgMagenta, bgRed, bgWhite, bgYellow, black, wh
 import { BinaryLike, pbkdf2Sync, randomInt } from "crypto";
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { logger } from "../../index.js";
-import prettyMs from "pretty-ms";
 import { Snowflake } from "@sapphire/snowflake";
+import prettyMs from "pretty-ms";
 
 const snowflake = new Snowflake(1118707200000);
 

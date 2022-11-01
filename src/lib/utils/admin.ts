@@ -1,6 +1,6 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { decode, hashSecret } from "./functions.js";
 
 export async function passAuth(req: FastifyRequest, reply: FastifyReply) {
