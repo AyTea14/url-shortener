@@ -32,7 +32,9 @@ export async function adminAuth(req: FastifyRequest, reply: FastifyReply) {
 }
 
 export async function tokenAuth(req: FastifyRequest, reply: FastifyReply) {
-    const token = req.headers["authorization"];
+    let token = req.headers["authorization"];
+    if (`${token}`.toLowerCase().startsWith("bearer")) token = `${token}`.replace(/bearer/gim, "").trim();
+
     if (!token) throw new ExtendedError("No token provided", HttpCode["Unauthorized"]);
     const _token = token.split(".");
     if (_token.length !== 3) throw new ExtendedError("Malformed token", HttpCode["Unauthorized"]);
