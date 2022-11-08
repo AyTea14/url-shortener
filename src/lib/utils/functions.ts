@@ -3,6 +3,8 @@ import { BinaryLike, pbkdf2Sync, randomInt } from "crypto";
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { logger } from "../../index.js";
 import { Snowflake } from "@sapphire/snowflake";
+import { HttpCode } from "#lib/types";
+import { errorResponseBuilderContext } from "@fastify/rate-limit";
 import prettyMs from "pretty-ms";
 
 const snowflake = new Snowflake(1118707200000);
@@ -67,6 +69,14 @@ export async function isHealthy(fastify: FastifyInstance) {
                 : prismaError
             : null,
     } as { status: "ok" | "down"; info: { database: { status: "up" | "down" } }; error: unknown | null };
+}
+
+export function rateLimitError(context: errorResponseBuilderContext) {
+    return {
+        code: HttpCode["Too Many Requests"],
+        error: HttpCode[HttpCode["Too Many Requests"]],
+        message: `Rate limit exceeded, retry in ${prettyMs(context.ttl, { verbose: true, keepDecimalsOnWholeSeconds: true })}`,
+    };
 }
 
 export function removeTrailingSlash(req: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) {

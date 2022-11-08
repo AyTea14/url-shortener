@@ -6,7 +6,7 @@ import { urls, users } from "#lib/routes";
 import { PrismaClient } from "@prisma/client";
 import { generateSnowflake, Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
 import { home } from "#lib/routes";
-import { config } from "#config";
+import { config, rateLimitConfig } from "#config";
 
 export const logger = new Logger();
 const PORT = config.port || 3000;
@@ -20,7 +20,7 @@ server.db = new PrismaClient();
 
 await server.db.$connect().then(async () => {
     logger.info("successfully connected to database");
-    await server.register(ratelimit, { global: true, max: 20, ban: 10, timeWindow: "25s" });
+    await server.register(ratelimit, rateLimitConfig);
     await server.register(auth);
     await server.register(users, { prefix: "/users" });
     await server.register(home);
