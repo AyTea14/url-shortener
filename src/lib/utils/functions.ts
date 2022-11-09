@@ -3,7 +3,7 @@ import { BinaryLike, pbkdf2Sync, randomInt } from "crypto";
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { logger } from "../../index.js";
 import { Snowflake } from "@sapphire/snowflake";
-import { HttpCode } from "#lib/types";
+import { HealthStats, HttpCode } from "#lib/types";
 import { errorResponseBuilderContext } from "@fastify/rate-limit";
 import prettyMs from "pretty-ms";
 
@@ -68,7 +68,7 @@ export async function isHealthy(fastify: FastifyInstance) {
                 ? prismaError.message
                 : prismaError
             : null,
-    } as { status: "ok" | "down"; info: { database: { status: "up" | "down" } }; error: unknown | null };
+    } as HealthStats;
 }
 
 export function rateLimitError(context: errorResponseBuilderContext) {
