@@ -5,11 +5,11 @@ import { logger } from "../../index.js";
 import { Snowflake } from "@sapphire/snowflake";
 import { HealthStats, HttpCode } from "#lib/types";
 import { errorResponseBuilderContext } from "@fastify/rate-limit";
+import { snowflakeEpoch } from "#config";
 import prettyMs from "pretty-ms";
 
-const snowflake = new Snowflake(1118707200000);
-
 export function generateSnowflake() {
+    const snowflake = new Snowflake(snowflakeEpoch);
     return "" + snowflake.generate();
 }
 

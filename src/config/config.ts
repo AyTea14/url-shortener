@@ -1,6 +1,8 @@
 import { rateLimitError } from "#lib/utils";
 import { RateLimitPluginOptions } from "@fastify/rate-limit";
 
+export const snowflakeEpoch = 1118707200000;
+
 export const config = {
     port: Number(process.env.PORT),
     shortLength: Number(process.env.SHORT_LENGTH) || 10,
