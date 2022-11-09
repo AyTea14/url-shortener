@@ -43,36 +43,12 @@ export async function home(fastify: FastifyInstance) {
             method: "GET",
             url: "/",
             handler: async (req, reply) =>
-                new ExtendedError(`Route ${String(req.raw.method).toUpperCase()}:${req.raw.url} not found`, HttpCode["Not Found"]),
+                new ExtendedError(`Route ${`${req.raw.method}`.toUpperCase()}:${req.raw.url} not found`, HttpCode["Not Found"]),
         });
 }
 
 export async function urls(fastify: FastifyInstance) {
     fastify
-        .route<{ Body: { url: string } }>({
-            method: "POST",
-            url: "/",
-            config: { rateLimit: { max: 200, timeWindow: "1h" } },
-            preHandler: fastify.auth([tokenAuth]),
-            handler: async function (req, reply) {
-                const baseUrl = `${process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`}`;
-                const inputUrl = req.body?.url;
-                if (!inputUrl) throw new ExtendedError("Please enter a url", HttpCode["Bad Request"]);
-                isBlockedHostname(inputUrl, req.hostname);
-
-                const existedId = await isExisted(fastify, inputUrl);
-                if (existedId)
-                    return reply
-                        .type("application/json")
-                        .code(HttpCode["OK"])
-                        .send({ short: existedId, url: new URL(existedId, baseUrl).toString() });
-
-                const id = await shorten(fastify, req.user!.id, inputUrl);
-                const url = new URL(id, baseUrl);
-
-                reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
-            },
-        })
         .route<{ Body: { url: string } }>({
             method: "POST",
             url: "/shorten",
