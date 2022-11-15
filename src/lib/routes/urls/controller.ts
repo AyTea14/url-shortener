@@ -30,11 +30,11 @@ export async function home(fastify: FastifyInstance) {
             method: "GET",
             url: "/stats",
             handler: async function (req, reply) {
-                let [urls, visitsData] = await fastify.db.$transaction([
+                let [urls, _visits] = await fastify.db.$transaction([
                     fastify.db.shortened.count({ where: { blocked: false } }),
                     fastify.db.shortened.findMany({ where: { blocked: false }, select: { visits: true } }),
                 ]);
-                let visits = visitsData.reduce((prev, curr) => prev + curr.visits.length, 0);
+                let visits = _visits.reduce((prev, curr) => prev + curr.visits.length, 0);
 
                 return reply.type("application/json").send({ urls, visits, version });
             },
@@ -42,8 +42,15 @@ export async function home(fastify: FastifyInstance) {
         .route({
             method: "GET",
             url: "/",
-            handler: async (req, reply) =>
-                new ExtendedError(`Route ${`${req.raw.method}`.toUpperCase()}:${req.raw.url} not found`, HttpCode["Not Found"]),
+            handler: async (req, reply) => {
+                let [urls, _visits] = await fastify.db.$transaction([
+                    fastify.db.shortened.count({ where: { blocked: false } }),
+                    fastify.db.shortened.findMany({ where: { blocked: false }, select: { visits: true } }),
+                ]);
+                let visits = _visits.reduce((prev, curr) => prev + curr.visits.length, 0);
+
+                return reply.view("index.ejs", { urls, visits });
+            },
         });
 }
 

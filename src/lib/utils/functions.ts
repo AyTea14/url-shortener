@@ -1,12 +1,12 @@
 import { bgBlue, bgCyan, bgGreen, bgMagenta, bgRed, bgWhite, bgYellow, black, whiteBright } from "colorette";
 import { BinaryLike, pbkdf2Sync, randomInt } from "crypto";
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
-import { logger } from "../../index.js";
 import { Snowflake } from "@sapphire/snowflake";
 import { HealthStats, HttpCode } from "#lib/types";
 import { errorResponseBuilderContext } from "@fastify/rate-limit";
 import { snowflakeEpoch } from "#config";
 import prettyMs from "pretty-ms";
+import { logger } from "#lib/setup";
 
 export function generateSnowflake() {
     const snowflake = new Snowflake(snowflakeEpoch);
