@@ -1,6 +1,9 @@
 dayjs.extend(window.dayjs_plugin_relativeTime);
 const visitsHTML = document.querySelector(".visits");
 const createdAtHTML = document.querySelector(".createdAt");
+const wrapperHTML = document.querySelector(".wrapper");
+const loadingHTML = document.querySelector(".lds-dual-ring");
+
 const tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const socket = io();
 
@@ -9,6 +12,11 @@ const createdUtc = Number(createdAtHTML.title) * 1000;
 
 const dateTitle = `${dayjs(createdUtc).format(`ddd, MMM DD, YYYY, hh:mm:ss A`)} ${getTimeZoneName(new Date(createdUtc))}`;
 createdAtHTML.outerHTML = `It was created on ${dateTitle}`;
+
+setTimeout(() => {
+    wrapperHTML.style.display = "block";
+    loadingHTML.style.display = "none";
+}, 800);
 
 const code = window.location.pathname.slice(1, -1);
 
