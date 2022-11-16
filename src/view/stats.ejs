@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="keywords" content="URL shortener,shorten,URL,link,smaller,shorter,hyperlink,shorten web address,v.gd,is.gd" />
+        <meta name="description" content="Link statistics" />
+        <link rel="stylesheet" type="text/css" href="/css/styles.css" media="screen" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.3/dayjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.3/plugin/relativeTime.min.js"></script>
+
+        <title>klik.ml | Link statistics</title>
+    </head>
+    <body>
+        <div id="wrapper" style="margin-top: 20px; margin-left: 20px">
+            <div id="main">
+                <h1><b>Link Statistics</b></h1>
+
+                <p>
+                    This shortened URL (<span
+                        ><a class="short" href="<%= locals.short %>" target="_blank" rel="noopener noreferrer"
+                            ><%= locals.short %></a
+                        ></span
+                    >) redirects to: <br />
+                    <span style="overflow-wrap: break-word; word-wrap: break-word; -ms-word-break: break-all; word-break: break-all"
+                        ><a href="<%= locals.url %>" target="_blank" rel="noopener noreferrer"><%= locals.url %></a>
+                    </span>
+                    <br />
+                    <br />
+                    <span class="createdAt" title="<%- locals.createdAt %>"></span>
+                    <br /><br />
+                    <span><a href="<%= locals.short %>" target="_blank" rel="noopener noreferrer"><%= locals.short %></a></span>
+                    have been accessed for <span class="visits"><%= locals.visits %></span> times.
+                </p>
+            </div>
+        </div>
+    </body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/stats.js"></script>
+</html>

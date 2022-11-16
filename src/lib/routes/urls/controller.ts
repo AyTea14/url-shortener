@@ -1,6 +1,6 @@
 import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
-import { isBlockedHostname, isHealthy, shorten, tokenAuth, isExisted, encode } from "#lib/utils";
+import { isBlockedHostname, isHealthy, shorten, tokenAuth, isExisted, encode, decode } from "#lib/utils";
 import { FastifyInstance } from "fastify";
 import { readFileSync } from "fs";
 import { resolve } from "path";
@@ -88,14 +88,18 @@ export async function urls(fastify: FastifyInstance) {
                 const code = encode(req.params.short);
                 const data = await fastify.db.shortened.findUnique({
                     where: { code },
-                    select: { url: true },
+                    select: { url: true, visits: true },
                 });
                 if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
-                await fastify.db.shortened.update({
-                    where: { code },
-                    data: { visits: { push: now } },
-                });
+                await fastify.db.shortened
+                    .update({
+                        where: { code },
+                        data: { visits: { push: now } },
+                    })
+                    .then((data) => {
+                        fastify.io.emit(req.params.short, { visits: data!.visits.length });
+                    });
 
                 return reply.redirect(HttpCode["Permanent Redirect"], data.url);
             },
@@ -107,11 +111,17 @@ export async function urls(fastify: FastifyInstance) {
                 const code = encode(req.params.short);
                 const data = await fastify.db.shortened.findUnique({
                     where: { code },
-                    select: { url: true, visits: true },
+                    select: { url: true, visits: true, createdAt: true },
                 });
-                if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
-
-                return reply.type("application/json").send({ url: data.url, visits: data.visits.map((date) => date.getTime()) });
+                if (!data) return reply.view("error.ejs");
+                // if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
+                return reply.view("stats.ejs", {
+                    url: data.url,
+                    visits: data.visits.length,
+                    createdAt: data.createdAt.getTime(),
+                    short: `${req.protocol}://${req.hostname}/${decode(code)}`,
+                });
+                // return reply.type("application/json").send({ url: data.url, visits: data.visits.map((date) => date.getTime()) });
             },
         });
 }
