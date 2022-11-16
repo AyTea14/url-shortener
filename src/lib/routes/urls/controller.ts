@@ -90,7 +90,8 @@ export async function urls(fastify: FastifyInstance) {
                     where: { code },
                     select: { url: true, visits: true },
                 });
-                if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
+                if (!data) return reply.view("error.ejs");
+                // if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
                 await fastify.db.shortened
                     .update({
