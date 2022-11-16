@@ -6,7 +6,6 @@ import { HealthStats, HttpCode } from "#lib/types";
 import { errorResponseBuilderContext } from "@fastify/rate-limit";
 import { snowflakeEpoch } from "#config";
 import prettyMs from "pretty-ms";
-import { logger } from "#lib/setup";
 
 export function generateSnowflake() {
     const snowflake = new Snowflake(snowflakeEpoch);
@@ -113,6 +112,6 @@ export const reqLogger = async (req: FastifyRequest, reply: FastifyReply) => {
     let clientIp = String(req.ip).padStart(15);
     let statusCode = coloredStatusCode(reply.statusCode);
     let method = coloredMethod(req.method);
-    logger.info(`${id} | ${statusCode} | ${latency} | ${clientIp} | ${method} "${req.url}"`);
+    req.logger.info(`${id} | ${statusCode} | ${latency} | ${clientIp} | ${method} "${req.url}"`);
     return;
 };

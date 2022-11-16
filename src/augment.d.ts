@@ -1,13 +1,16 @@
 import { PrismaClient } from "@prisma/client";
+import { Logger } from "#lib/utils";
 
 declare module "fastify" {
     interface FastifyInstance {
         db: PrismaClient;
+        logger: Logger;
     }
     interface FastifyRequest {
         db: PrismaClient;
         user: { id: string; name: string } | null;
         admin: boolean;
+        logger: Logger;
     }
 }
 

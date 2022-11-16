@@ -21,6 +21,7 @@ const server = fastify({
     genReqId: (req) => generateSnowflake(),
 });
 server.db = new PrismaClient();
+server.logger = logger;
 
 export default await server.db.$connect().then(async () => {
     logger.info("successfully connected to database");
@@ -48,12 +49,13 @@ export default await server.db.$connect().then(async () => {
             req.user = null;
             req.admin = false;
             req.db = server.db;
+            req.logger = logger;
         })
         .addHook("preHandler", removeTrailingSlash)
         .addHook("onResponse", async (_, reply) => reply.getResponseTime())
         .addHook("onResponse", reqLogger);
 
     server.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
-        logger.info(`application listening at ${address}`);
+        server.logger.info(`application listening at ${address}`);
     });
 });
