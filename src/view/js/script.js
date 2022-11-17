@@ -4,8 +4,10 @@ const submitButton = document.querySelector(".submitbutton");
 const urlBox = document.querySelector("#urlboxcontainer .urlbox");
 const socket = io();
 
-socket.on("data", (data) => {
+socket.on("created", (data) => {
     urls.textContent = data.urls;
+});
+socket.on("visited", (data) => {
     visits.textContent = data.visits;
 });
 

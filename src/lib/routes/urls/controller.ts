@@ -76,6 +76,9 @@ export async function urls(fastify: FastifyInstance) {
 
                 const id = await shorten(fastify, req.user!.id, inputUrl);
                 const url = new URL(id, baseUrl);
+                await fastify.db.shortened.findMany().then((data) => {
+                    fastify.io.emit("created", { urls: data.length });
+                });
 
                 reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
             },
@@ -98,9 +101,10 @@ export async function urls(fastify: FastifyInstance) {
                         where: { code },
                         data: { visits: { push: now } },
                     })
-                    .then((data) => {
-                        fastify.io.emit(req.params.short, { visits: data!.visits.length });
-                    });
+                    .then((data) => fastify.io.emit(req.params.short, { visits: data!.visits.length }));
+                await fastify.db.shortened
+                    .findMany()
+                    .then((data) => fastify.io.emit("visited", { visits: data.reduce((all, url) => all + url.visits.length, 0) }));
 
                 return reply.redirect(HttpCode["Permanent Redirect"], data.url);
             },
