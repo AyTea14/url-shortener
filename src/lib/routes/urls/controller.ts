@@ -39,7 +39,7 @@ export async function home(fastify: FastifyInstance) {
                 return reply.type("application/json").send({ urls, visits, version });
             },
         })
-        .route({
+        .route<{ Body: { url: string } }>({
             method: "GET",
             url: "/",
             handler: async (req, reply) => {
@@ -50,6 +50,51 @@ export async function home(fastify: FastifyInstance) {
                 let visits = _visits.reduce((prev, curr) => prev + curr.visits.length, 0);
 
                 return reply.view("index.ejs", { urls, visits });
+            },
+        });
+}
+
+export async function api(fastify: FastifyInstance) {
+    fastify
+        .route<{ Body: { url: string } }>({
+            method: "POST",
+            url: "/shorten",
+            config: { rateLimit: { max: 200, timeWindow: "1h" } },
+            preHandler: fastify.auth([tokenAuth]),
+            handler: async function (req, reply) {
+                const baseUrl = `${process.env.BASE_URL ? process.env.BASE_URL : `${req.protocol}://${req.hostname}`}`;
+                const inputUrl = req.body?.url;
+                if (!inputUrl) throw new ExtendedError("Please enter a url", HttpCode["Bad Request"]);
+                isBlockedHostname(inputUrl, req.hostname);
+
+                const existedId = await isExisted(fastify, inputUrl);
+                if (existedId)
+                    return reply
+                        .type("application/json")
+                        .code(HttpCode["OK"])
+                        .send({ short: existedId, url: new URL(existedId, baseUrl).toString() });
+
+                const id = await shorten(fastify, req.user!.id, inputUrl);
+                const url = new URL(id, baseUrl);
+                await fastify.db.shortened.findMany().then((data) => {
+                    fastify.io.emit("created", { urls: data.length });
+                });
+
+                reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
+            },
+        })
+        .route<{ Params: { short: string } }>({
+            method: "GET",
+            url: "/stats/:short",
+            handler: async function (req, reply) {
+                const code = encode(req.params.short);
+                const data = await fastify.db.shortened.findUnique({
+                    where: { code },
+                    select: { url: true, visits: true, createdAt: true },
+                });
+                if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
+
+                return reply.type("application/json").send({ url: data.url, visits: data.visits.map((date) => date.getTime()) });
             },
         });
 }
@@ -93,7 +138,7 @@ export async function urls(fastify: FastifyInstance) {
                     where: { code },
                     select: { url: true, visits: true },
                 });
-                if (!data) return reply.view("error.ejs");
+                if (!data) return reply.view("error.ejs", { error: `Shortened URL not found in database` });
                 // if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
 
                 await fastify.db.shortened
@@ -118,8 +163,9 @@ export async function urls(fastify: FastifyInstance) {
                     where: { code },
                     select: { url: true, visits: true, createdAt: true },
                 });
-                if (!data) return reply.view("error.ejs");
+                if (!data) return reply.view("error.ejs", { error: `Shortened URL not found in database` });
                 // if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
+
                 return reply.view("stats.ejs", {
                     url: data.url,
                     visits: data.visits.length,

@@ -6,11 +6,10 @@ import st from "@fastify/static";
 import socketIO from "fastify-socket.io";
 import ratelimit from "@fastify/rate-limit";
 import caching from "@fastify/caching";
-import { urls, users } from "#lib/routes";
+import { urls, users, home, api } from "#lib/routes";
 import { PrismaClient } from "@prisma/client";
 import { generateSnowflake, Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
 import { config, rateLimitConfig, stConfig, viewConfig } from "#config";
-import { home } from "#lib/routes";
 
 export const logger = new Logger();
 const PORT = config.port || 3000;
@@ -34,6 +33,7 @@ export default await server.db.$connect().then(async () => {
     await server.register(users, { prefix: "/users" });
     await server.register(home);
     await server.register(urls);
+    await server.register(api, { prefix: "/api" });
 
     setInterval(async () => {
         let [urls, _visits] = await server.db.$transaction([

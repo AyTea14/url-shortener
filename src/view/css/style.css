@@ -254,6 +254,7 @@ a#short_url {
 }
 
 button.submitbutton {
+    margin-top: 10px;
     margin-bottom: 10px;
     display: block;
     margin-left: auto;
