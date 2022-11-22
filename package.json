@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
-    "build": "tsup && npx prisma@4.5.0 generate",
+    "build": "tsup && npx prisma generate",
     "start": "node --enable-source-maps ./dist/index.js",
     "dev": "tsup --watch --onSuccess \"npm run start\""
   },
