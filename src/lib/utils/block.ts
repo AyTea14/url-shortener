@@ -2,6 +2,8 @@ import { ExtendedError } from "#lib/exceptions";
 import { HttpCode } from "#lib/types";
 import { blockedHostnames } from "#config";
 
+// https://raw.githubusercontent.com/sambokai/ShortURL-Services-List/master/shorturl-services-list.csv
+
 export function isBlockedHostname(url: string, baseUrl?: string) {
     if (baseUrl) blockedHostnames.push(baseUrl);
     try {
