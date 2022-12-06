@@ -8,10 +8,10 @@ const tzid = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const socket = io();
 
 const detectedLocale = detectLocale();
-const createdUtc = Number(createdAtHTML.title) * 1000;
+const createdUtc = Number(createdAtHTML.title);
 
 const dateTitle = `${dayjs(createdUtc).format(`ddd, MMM DD, YYYY, hh:mm:ss A`)} ${getTimeZoneName(new Date(createdUtc))}`;
-createdAtHTML.outerHTML = `It was created on ${dateTitle}`;
+createdAtHTML.innerHTML = `It was created on ${dateTitle}`;
 
 setTimeout(() => {
     wrapperHTML.style.display = "block";
