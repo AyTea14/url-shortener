@@ -1,7 +1,6 @@
 export const blockedHostnames = [
     "example.com",
     "shorturl.at",
-    "google.com",
     "g.co",
     "klik.ml",
     "urlr.me",
