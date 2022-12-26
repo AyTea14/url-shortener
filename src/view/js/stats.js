@@ -10,7 +10,7 @@ const socket = io();
 const detectedLocale = detectLocale();
 const createdUtc = Number(createdAtHTML.title);
 
-const dateTitle = `${dayjs(createdUtc).format(`ddd, MMM DD, YYYY, hh:mm:ss A`)} ${getTimeZoneName(new Date(createdUtc))}`;
+const dateTitle = `${dayjs(createdUtc).format(`dddd, DD MMM YYYY, hh:mm:ss A`)} ${getTimeZoneName(new Date(createdUtc))}`;
 createdAtHTML.innerHTML = `It was created on ${dateTitle}`;
 
 setTimeout(() => {
