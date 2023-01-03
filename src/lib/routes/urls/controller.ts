@@ -112,7 +112,7 @@ export async function urls(fastify: FastifyInstance) {
                 if (!inputUrl) throw new ExtendedError("Please enter a url", HttpCode["Bad Request"]);
                 isBlockedHostname(inputUrl, req.hostname);
 
-                const existedId = await isExisted(fastify, inputUrl);
+                const existedId: string | null = await isExisted(fastify, inputUrl);
                 if (existedId)
                     return reply
                         .type("application/json")
@@ -121,11 +121,19 @@ export async function urls(fastify: FastifyInstance) {
 
                 const id = await shorten(fastify, req.user!.id, inputUrl);
                 const url = new URL(id, baseUrl);
-                await fastify.db.shortened.findMany().then((data) => {
-                    fastify.io.emit("created", { urls: data.length });
-                });
 
-                reply.type("application/json").code(HttpCode["Created"]).send({ short: id, url: url.toString() });
+                return reply
+                    .type("application/json")
+                    .code(HttpCode["Created"])
+                    .send({ short: id, url: url.toString() })
+                    .then(
+                        async () => {
+                            await fastify.db.shortened.findMany().then((data) => {
+                                fastify.io.emit("created", { urls: data.length });
+                            });
+                        },
+                        () => {}
+                    );
             },
         })
         .route<{ Params: { short: string } }>({
@@ -140,18 +148,22 @@ export async function urls(fastify: FastifyInstance) {
                 });
                 if (!data) return reply.view("error.ejs", { error: `Shortened URL not found in database` });
                 // if (!data) throw new ExtendedError("Shortened URL not found in database", HttpCode["Not Found"]);
-
-                await fastify.db.shortened
-                    .update({
-                        where: { code },
-                        data: { visits: { push: now } },
-                    })
-                    .then((data) => fastify.io.emit(req.params.short, { visits: data!.visits.length }));
-                await fastify.db.shortened
-                    .findMany()
-                    .then((data) => fastify.io.emit("visited", { visits: data.reduce((all, url) => all + url.visits.length, 0) }));
-
-                return reply.redirect(HttpCode["Permanent Redirect"], data.url);
+                return reply.redirect(HttpCode["Permanent Redirect"], data.url).then(
+                    async () => {
+                        await fastify.db.shortened
+                            .update({
+                                where: { code },
+                                data: { visits: { push: now } },
+                            })
+                            .then((data) => fastify.io.emit(req.params.short, { visits: data!.visits.length }));
+                        await fastify.db.shortened
+                            .findMany()
+                            .then((data) =>
+                                fastify.io.emit("visited", { visits: data.reduce((all, url) => all + url.visits.length, 0) })
+                            );
+                    },
+                    () => {}
+                );
             },
         })
         .route<{ Params: { short: string } }>({
