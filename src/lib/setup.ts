@@ -6,6 +6,7 @@ import st from "@fastify/static";
 import socketIO from "fastify-socket.io";
 import ratelimit from "@fastify/rate-limit";
 import caching from "@fastify/caching";
+import cors from "@fastify/cors";
 import { urls, users, home, api } from "#lib/routes";
 import { PrismaClient } from "@prisma/client";
 import { generateSnowflake, Logger, removeTrailingSlash, reqLogger } from "#lib/utils";
@@ -24,6 +25,7 @@ server.logger = logger;
 
 export default await server.db.$connect().then(async () => {
     logger.info("successfully connected to database");
+    await server.register(cors, { origin: "*" });
     await server.register(caching, { privacy: caching.privacy.NOCACHE });
     await server.register(st, stConfig);
     await server.register(view, viewConfig);
